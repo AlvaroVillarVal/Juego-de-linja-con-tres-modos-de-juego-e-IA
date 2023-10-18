@@ -6,6 +6,10 @@
 import pygame 
 import sys
 from Linja import Linja
+#TO DO: Hacer que cuando se selccione una ficha esta se resalte(Dibujando una circulito blanco fino por encima),
+#  hacer que salga por pantalla el hecho de que no se puede mover una ficha, No seleccionar una coordenada cuando 
+# esta este vacia en la matriz,hacer pagina de inicio para seleccionar que modo jugar, hacer pantalla de final
+
 pygame.init()
 ##########################################################################################################################################
 # Definimos las constantes
@@ -144,7 +148,7 @@ while True:
             # Escribimos cuantas fichas Negras hay en la ultima fila
             interfaz.escribir("Fichas en la ultima fila",[690,700])
             interfaz.escribir("Negras: {}".format(interfaz.juego.contadorFin1),[700,715])
-            interfaz.juego.countInteligente() #Contamos los puntos de los dos jugadores
+            interfaz.juego.countInteligente(interfaz.juego.tablero) #Contamos los puntos de los dos jugadores
             #Imprimimos por pantalla los puntos de ambos jugadores
             interfaz.escribir("Puntos Fichas ",[690,655])
             interfaz.escribir("Negras: {}".format(interfaz.juego.contadorTot1),[690,670])

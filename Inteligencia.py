@@ -1,14 +1,8 @@
-## Author: Álvaro Villar Val
-## Nombre: Practica Linja
-## Version: 0.8
-## Fecha: 11/10/2023
-#Declaramos los imports
 import numpy as np
+from Linja import Linja
 
-##########################################################################################################################################
-#Definicion de Clase Linja
-class Linja():
 
+class Inteligente():
     #Definimos el constructor de la clase objeto
     ############################################################################################################## 
     def __new__(cls, *args, **kwargs):
@@ -18,20 +12,17 @@ class Linja():
 
     #Definimos el constructor de la clase
     ##############################################################################################################                    
-    def __init__(self):
+    def __init__(self,tablero,):
 
         #Inicializamos las Variables
-        self.tablero=np.zeros([8,6]) #Tablero del juego
-        self.contadorTot1=0             #Contador de los puntos del jugador negro o 1 menos los puntos del jugador rojo
-        self.contador1=0                #Contador de los puntos del jugador negro o 1 
+        self.tablero=tablero #Tablero del juego
+        self.contadorTot1=0             #Contador de los puntos del jugador negro o 1 menos los puntos del jugador rojo 
         self.contadorTot2=0             #Contador de los puntos del jugador rojo o 2 menos los puntos del jugador negro
-        self.contador2=0                #Contador de los puntos del judafor rojo o 2 
         self.contadorFin1=0          #Contador que apunta cuantas fichas extra hay en la fila 7 del tablero
         self.contadorFin2=0          #Contador que apunta cuantas fichas extra hay en la fila 0 del tablero
         self.movimiento=0            #Cuanto se puede mover en el segundo movimiento del Turno
         self.turno=2                 #Guarda el turno en el que estamos
-    #############################################################################################################  
-
+    ############################################################################################################# 
     #Definimos la función que establece el stado incial del tablero
     #############################################################################################################                    
     def inicio(self): 
@@ -357,42 +348,13 @@ class Linja():
                             return False               
         return True #Si no hemos encontrado fichas Rojas despues de encontrar la Negra es el final del juego
     #############################################################################################################
-    
-###########################################################################################################################################
-#Runer Code
-# prueba= Linja()
-# prueba.inicio()
-# prueba.count()
-# print(prueba.tablero)
-# comprobadorFinal=True
-# prueba= Linja()
-# prueba.inicio()
-# # prueba.count()
-# # prueba.countInteligente()
-# # print(prueba.contadorTot1,prueba.contadorTot2)
-# # print(prueba.contador1,prueba.contador2)
-# print("\nBienvenido al inicio del juego, usted esta jugando a Linja\n")
-# while comprobadorFinal:
-#     print(prueba.tablero)
-#     if(prueba.movimiento==0):
-#         print("\n Empezamos la 1º parte del ",prueba.getTurno(), " puedes moverte 1 casilla")
-#     else:
-#         print("\n Empezamos la 2º parte del ",prueba.getTurno()," puedes mover ",prueba.movimiento," casillas")
-    
-#     cordenadaOrigentemp=[int(x) for x in input("\nDame la coordenada origen en este formato: Fila Columna ").split()]
-#     cordenadaFinaltemp=[int(x) for x in input("\nDame la coordenada final en este formato: Fila Columna ").split()]
-#     cordenadaOrigen=[cordenadaOrigentemp[0]-1, cordenadaOrigentemp[1]-1]
-#     cordenadaFinal=[cordenadaFinaltemp[0]-1, cordenadaFinaltemp[1]-1]
-#     prueba.moveArbitrado(cordenadaOrigen,cordenadaFinal)
-#     if(prueba.comprobarFin()):
-#         comprobadorFinal=False
-#         prueba.count()
-#         print("¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡FIN DEL JUEGO!!!!!!!!!!!!!!!!!!!!!!!!!!")
-#         print("La puntuación del jugador Negro es: ",prueba.contador1)
-#         print("La puntuación del jugador Rojo es: ",prueba.contador2)
-#         if(prueba.contador2>prueba.contador1):
-#             print("El ganador es el jugador Rojo")
-#         elif(prueba.contador2<prueba.contador1):
-#             print("El ganador es el jugador Negro")
-#         else:
-#             print("Empate entre los dos jugadores")
+     
+    #Definimos las función del turno del ordenador
+    #############################################################################################################
+    def jugarTurnoOrdenador(self):
+        tableroTemp=self.tablero
+        ismax=True
+        if(ismax):
+            hijos=[]
+
+    #############################################################################################################
