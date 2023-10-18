@@ -1,6 +1,6 @@
 ## Author: Álvaro Villar Val
 ## Nombre: Inteligencia
-## Version: 0.1
+## Version: 0.2
 ## Fecha: 18/10/2023
 #Declaramos los imports
 import numpy as np
@@ -253,14 +253,31 @@ class Inteligente():
     #Definimos las función del turno del ordenador
     #############################################################################################################
     def jugarTurnoOrdenador(self):
-        tableroTemp=self.tablero
         ismax=True
+        tablero=self.tablero
+        movimientoOptimo=max(tablero,0)
         
-        
+    def posPrimFich(self,color):
+        for j in range(8):
+            for i in range(6):
+                if(color==2):
+                    if(self.tablero[j][i]==2):
+                        return [j,i]
+                else:
+                    if(self.tablero[7-j][5-i]==1):
+                        return [j,i]
+
 
     #############################################################################################################
     def min(self):
         return 0
     
-    def max(self):
+    def max(self,tableroPap,prof):
+
+        hijos=[]
+        for i in range(6):
+            tablerotemp=tableroPap
+            print("play despacito")
+        for i in range(len(hijos)):
+            min(hijos[i],prof+1)
         return 0
