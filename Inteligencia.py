@@ -1,5 +1,10 @@
+## Author: Álvaro Villar Val
+## Nombre: Inteligencia
+## Version: 0.1
+## Fecha: 18/10/2023
+#Declaramos los imports
 import numpy as np
-from Linja import Linja
+
 
 
 class Inteligente():
@@ -12,7 +17,7 @@ class Inteligente():
 
     #Definimos el constructor de la clase
     ##############################################################################################################                    
-    def __init__(self,tablero,):
+    def __init__(self,tablero,turno):
 
         #Inicializamos las Variables
         self.tablero=tablero #Tablero del juego
@@ -21,24 +26,8 @@ class Inteligente():
         self.contadorFin1=0          #Contador que apunta cuantas fichas extra hay en la fila 7 del tablero
         self.contadorFin2=0          #Contador que apunta cuantas fichas extra hay en la fila 0 del tablero
         self.movimiento=0            #Cuanto se puede mover en el segundo movimiento del Turno
-        self.turno=2                 #Guarda el turno en el que estamos
-    ############################################################################################################# 
-    #Definimos la función que establece el stado incial del tablero
-    #############################################################################################################                    
-    def inicio(self): 
-        #self.tablero=np.array([(2,2,2,2,2,2),(2,2,2,2,2,0),(0,0,0,0,0,0),(0,0,0,0,0,0),(0,0,0,0,0,0),(1,0,0,0,2,1),(1,1,1,1,1,1),(1,1,1,1,0,0)])
-        #Inicializamos con un bucle for las posiciones iniciales de las fichas negras y Rojas
-        for j in range(8):
-            for i in range(6):
-                if(j==0): #Colocamos las fichas Negras en la fila 0
-                    self.tablero[j][i]=1
-                elif(j==7): #Colocamos las fichas Rojas en la fila 7
-                    self.tablero[j][i]=2
-                elif(i==0): #Colocamos las fichas Negras en la columna 0
-                    self.tablero[j][i]=1
-                elif(i==5): #Colocamos las fichas rojas en la columna 5
-                    self.tablero[j][i]=2
-    #############################################################################################################                 
+        self.turno=turno                 #Guarda el turno en el que estamos
+    #############################################################################################################              
                      
     #Definimos el metodo para hallar los puntos de las fichas negras
     #############################################################################################################                                   
@@ -56,12 +45,6 @@ class Inteligente():
                 return 0 #Si no esta en ninguna de las filas de puntuar se devolveria 0
     ############################################################################################################# 
     
-    #Definimos un metodo para devolver el tablero       
-    #############################################################################################################
-    def returnTablero(self):
-        return self.tablero
-    #############################################################################################################
-    
     #Definimos el metodo para hallar los puntos de las fichas negras  
     ##############################################################################################################                             
     def valSum2(self,valj):
@@ -78,20 +61,6 @@ class Inteligente():
                 return 0 #Si no esta en ninguna de las filas de puntuar se devolveria 0
     #############################################################################################################         
    
-   #Definimos el metodo para hallar los puntos de cada jugador
-   #############################################################################################################         
-    def count(self):
-        for j in range(8):
-            for i in range(6):
-                if self.tablero[j][i]==1: #Comprobamos si tiene una ficha Negra
-                    #Sumamos el valor que tenga la ficha Negra dependiendo de la fila en la que este
-                    self.contador1+=self.valSum1(j) 
-                elif self.tablero[j][i]==2:
-                    #Sumamos el valor que tenga la ficha Roja dependiendo de la fila en la que este
-                    self.contador2+=self.valSum2(j)
-        self.contador2+=self.contadorFin2*5 #Añadimos las fichas extra del final del tablero
-        self.contador1+=self.contadorFin1*5 #Añadimos las fichas extra del final del tablero
-    #############################################################################################################  
 
     #Definimos el metodo para hallar los puntos que tiene cada jugador y restarle al otro los que el otro tiene
     ##############################################################################################################                    
@@ -174,18 +143,6 @@ class Inteligente():
                     self.tablero[origen[0]][origen[1]]=0  
         else: #En caso de no estar en ninguna de las filas del final simplemente movemos la ficha
                 self.simpleMove(origen,destino)
-    ############################################################################################################# 
-
-    #Definimos el metodo para obterner el turno en el que se ecuentra el juego en el momento
-    #############################################################################################################
-    def getTurno(self):
-        if self.turno==1:
-            return "Turno Negro" 
-        elif self.turno==2:
-            return "Turno Rojo"
-        else:
-            print("Ha ocurrido un error en get Turno")
-            return 0
     ############################################################################################################# 
 
     #Definimos el metodo para saber si una posicion dada esta vacia o no
@@ -292,69 +249,18 @@ class Inteligente():
             return False
         return True
     #############################################################################################################   
-     
-    # Definimos una función que compruebe que no hay movimientos posibles para el turno actual
-    #############################################################################################################         
-    def movimientoPosibleEnTurno(self):
-        primeraParteTurno=False     #Declaramos un comprobador para saber en que parte del turno estamos
-        if(self.movimiento==0):     #Comprobamos que estamos en la primera parte del turno
-            primeraParteTurno=True  #Si lo estamos guardamos que lo estamos
-        for j in range (8):         #Recorremos el tablero
-            for i in range(6):
-                if(self.tablero[j][i]==self.turno): #Si la ficha coincide con el turno en el que nos encontramos
-                    if(primeraParteTurno):              #Si estamos en la primera parte del turno
-                        for k in range(6):              #Comprobamos todas las casillas en la fila en la que se puede mover
-                            #Si estamos en turno uno sumaremos 1 a la fila actual para saber a que casillas se puede mover
-                            if(self.turno==1):          
-                                if(self.isLegal(j,i,j+1,k)): #Comprobamos si seria un movimiento legal a la casilla
-                                    return False             #Si no lo es devolvemos false
-                            else:   #En caso de estar en turno dos tendremos que restarle 1 a la fila actual
-                                if(self.isLegal(j,i,j-1,k)):  #Comprobamos si seria un movimiento legal a la casilla
-                                    return False              #Si no lo es devolvemos false
-                    else:    #En caso de estar en la segunda mitad del turno
-                        for k in range(6):  #Comprobamos todas las casillas en la fila en la que se puede mover
-                            #Si estamos en turno uno sumaremos el movimiento a la fila actual para saber a que casillas se puede mover
-                            if(self.turno==1):
-                                if(self.isLegal(j,i,j+self.movimiento,k)): #Comprobamos si seria un movimiento legal a la casilla
-                                    return False                           #Si no lo es devolvemos false
-                            else: #Si estamos en turno uno restaremos el movimiento a la fila actual para saber a que casillas se puede mover
-                                if(self.isLegal(j,i,j-self.movimiento,k)): #Comprobamos si seria un movimiento legal a la casilla
-                                    return False                           #Si no lo es devolvemos false
-        return True
-    #############################################################################################################
-    def gameOver(self):
-        if(self.movimientoPosibleEnTurno()):
-            self.changeTurn()
-            self.movimiento=0
-            if(self.movimientoPosibleEnTurno()):
-                return True
-        return False
-    #Definimos un metodo que comprueba si se ha llegado al estado de fin de juego
-    #############################################################################################################
-    def comprobarFin(self):
-        if(self.gameOver()):
-            return True
-        comprobatorTemp=False #Comprobador de si nos hemos encontrado alguna ficha Negra
-        for j in range(8): #Recorremos el tablero 
-            for i in range(6):
-                if(comprobatorTemp): #si hemos encontrado almenos una ficha Negra
-                    if(self.tablero[j][i]==2): #Comprobamos si hay alguna ficha Roja despues
-                            return False #Si la hay no es el final del juego                
-                elif(self.tablero[j][i]==1): #Si nos encontramos una ficha Negra
-                    comprobatorTemp=True    #Guardamos que nos hemos encontrado la ficha Negra
-                    #Comprobamos que no hay una ficha negra en la misma fila antes de donde nos hemos encontrado a la Roja
-                    for k in range(i):      
-                        if(self.tablero[j][k]==2): #si hay una ficha antes de donde hemos encontrado la negra no es el final del juego
-                            return False               
-        return True #Si no hemos encontrado fichas Rojas despues de encontrar la Negra es el final del juego
-    #############################################################################################################
-     
+          
     #Definimos las función del turno del ordenador
     #############################################################################################################
     def jugarTurnoOrdenador(self):
         tableroTemp=self.tablero
         ismax=True
-        if(ismax):
-            hijos=[]
+        
+        
 
     #############################################################################################################
+    def min(self):
+        return 0
+    
+    def max(self):
+        return 0

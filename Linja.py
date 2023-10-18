@@ -1,5 +1,5 @@
 ## Author: Álvaro Villar Val
-## Nombre: Practica Linja
+## Nombre: Linja
 ## Version: 0.8
 ## Fecha: 11/10/2023
 #Declaramos los imports
