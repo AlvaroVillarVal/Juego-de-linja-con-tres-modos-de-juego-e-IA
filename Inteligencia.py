@@ -1,6 +1,6 @@
 ## Author: Álvaro Villar Val
 ## Nombre: Inteligencia
-## Version: 0.3
+## Version: 0.4
 ## Fecha: 18/10/2023
 #Declaramos los imports
 import numpy as np
@@ -61,7 +61,7 @@ class Inteligente():
 
 
     #############################################################################################################
-    def mini(self, estadoPap:Linja,prof,turnOrg):
+    def minMax(self, estadoPap:Linja,prof,turnOrg):
         if(prof<2):
             hijos=[]
             for i in range(6):
@@ -82,61 +82,38 @@ class Inteligente():
                         hijos.append(hijo)
                         comprobador=False
                     destExluido.append(hijo[2]) 
-
-            maxHijos=[]
-            minHijo=[temp,cordFich,destino,100000]
-            comprobador=True           
-            for i in range(len(hijos)):
-                hijos[i].changeTurn()
-                maxHijos[i]=self.maxi(hijos[i],prof+1,turnOrg)
-                for temp in maxHijos:
-                    if(minHijo[3]>=temp[3]):
-                        minHijo=temp
-                        comprobador=False
-            if(comprobador):
-                print("Error en mini en busqueda del min")
-                return 0
-            return minHijo
+            if(estadoPap.turno==turnOrg):
+                minHijos=[]
+                maxHijo=[temp,cordFich,destino,-100000]
+                comprobador=True           
+                for i in range(len(hijos)):
+                    hijos[i].changeTurn()
+                    minHijos[i]=self.minMax(hijos[i],prof+1,turnOrg)
+                    for temp in minHijos:
+                        if(maxHijo[3]<=temp[3]):
+                            maxHijo=temp
+                            comprobador=False
+                if(comprobador):
+                    print("Error en mini en busqueda del min")
+                    return 0
+                return maxHijo
+            else:
+                maxHijos=[]
+                minHijo=[temp,cordFich,destino,100000]
+                comprobador=True           
+                for i in range(len(hijos)):
+                    hijos[i].changeTurn()
+                    maxHijos[i]=self.minMax(hijos[i],prof+1,turnOrg)
+                    for temp in maxHijos:
+                        if(minHijo[3]>=temp[3]):
+                            minHijo=temp
+                            comprobador=False
+                if(comprobador):
+                    print("Error en mini en busqueda del min")
+                    return 0
+                return minHijo
             
         else:
             return estadoPap
 
-    def maxi(self, estadoPap:Linja,prof,turnOrg):
-        if(prof<2):
-            hijos=[]
-            for i in range(6):
-                comprobador=True
-                origExcluido=[]
-                destExluido=[]
-                counts=[]
-                while(comprobador):
-                    cordFich=self.posPrimFich(self,estadoPap,origExcluido)
-                    if(cordFich==False):
-                        print("Error en Max")
-                    temp=estadoPap
-                    destino=self.moverPrimerSitio(temp,cordFich,destExluido)
-                    if(destino==False):
-                        origExcluido.append(cordFich)
-                    hijo=[temp,cordFich,destino,temp.countInteligente()[turnOrg-1]]
-                    if(hijo[3] not in counts):
-                        hijos.append(hijo)
-                        comprobador=False
-                    destExluido.append(hijo[2]) 
-
-            minHijos=[]
-            maxHijo=[temp,cordFich,destino,-100000]
-            comprobador=True           
-            for i in range(len(hijos)):
-                hijos[i].changeTurn()
-                minHijos[i]=self.maxi(hijos[i],prof+1,turnOrg)
-                for temp in minHijos:
-                    if(maxHijo[3]<=temp[3]):
-                        maxHijo=temp
-                        comprobador=False
-            if(comprobador):
-                print("Error en mini en busqueda del min")
-                return 0
-            return maxHijo
-            
-        else:
-            return estadoPap
+   
