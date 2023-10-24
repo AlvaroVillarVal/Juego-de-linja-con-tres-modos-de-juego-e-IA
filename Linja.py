@@ -125,7 +125,7 @@ class Linja():
         contadorTemp1-=self.contadorFin2*5 #Restamos las fichas del final del tablero del otro jugador
         contadorTemp2-=self.contadorFin1*5 #Restamos las fichas del final del tablero del otro jugador
         contadorTemp1+=self.contadorFin1*5 #Añadimos las fichas extra del final del tablero
-        return [contadorTemp2,contadorTemp1]   
+        return [contadorTemp1,contadorTemp2]   
     #############################################################################################################     
         
     #Definimos el metodo para comparar si dos situaciones del tablero son la misma
