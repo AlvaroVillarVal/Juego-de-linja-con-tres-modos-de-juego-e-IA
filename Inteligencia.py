@@ -13,25 +13,18 @@ class Inteligente():
     def __new__(cls, *args, **kwargs):
 
         return super().__new__(cls)
-    ############################################################################################################# 
-
-    #Definimos el constructor de la clase
-    ##############################################################################################################                    
-    def __init__(self,tablero,turno):
-
-        #Inicializamos las Variables
-        juego=Linja()
-        juego.tablero=tablero           #Tablero del juego
-        juego.turno=turno                 #Guarda el turno en el que estamos
     #############################################################################################################              
                      
     #Definimos las función del turno del ordenador
     #############################################################################################################
-    def jugarTurnoOrdenador(self):
-        tablero=self.tablero
-        movimientoOptimo=(tablero,0)
+    def jugarTurnoOrdenador(self,juego:Linja):
+        hijoOptimo=self.minMax(juego,0,juego.turno)
+        movimientoOptimo=[hijoOptimo[1],hijoOptimo[2]]
         return movimientoOptimo
+    #############################################################################################################
 
+    #Definimos una funcion  que mueva la ficha al primer sitio que encuentre que no este en la lista de excluisiones
+    #############################################################################################################
     def moverPrimerSitio(self,juego:Linja,origen,excluidos):
         if(juego.movimiento==0):
             for i in range (6):
@@ -58,8 +51,10 @@ class Inteligente():
                             if(juego.tablero[7-j][5-i]==1):
                                 return [j,i]
         return False
+    #############################################################################################################
 
-
+    #Definimos la función minMax que hara el algoritmo minMax y devolvera el mejor movimiento posible para el turno 
+    # que lo llama
     #############################################################################################################
     def minMax(self, estadoPap:Linja,prof,turnOrg):
         if(prof<2):
@@ -115,5 +110,7 @@ class Inteligente():
             
         else:
             return estadoPap
-
+    #############################################################################################################
+###############################################################################################################################
+#Runer Code
    
