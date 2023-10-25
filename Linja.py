@@ -85,8 +85,51 @@ class Linja():
                 return 1
             else:
                 return 0 #Si no esta en ninguna de las filas de puntuar se devolveria 0
-    #############################################################################################################         
-   
+    #############################################################################################################  
+    
+    #Definimos el metodo para hallar los puntos de las fichas rojas para la funcion de coste
+    ##############################################################################################################                             
+    def valSum2Int(self,valj):
+           
+            if valj==0: #Si esta en la fila 0 la ficha vale 5
+                return 28
+            elif valj==1: #Si esta en la fila 1 la ficha vale 3
+                return 21
+            elif valj==2: #Si esta en la fila 2 la ficha vale 2
+                return 15
+            elif valj==3: #Si esta en la fila 3 la ficha vale 1
+                return 10
+            elif valj==4: #Si esta en la fila 4 la ficha vale 0
+                return 6
+            elif valj==5: #Si esta en la fila 5 la ficha vale -1
+                return 3
+            elif valj==6: #Si esta en la fila 6 la ficha vale -2
+                return 1
+            elif valj==7: #Si esta en la fila 7 la ficha vale -3
+                return 0
+    ############################################################################################################# 
+    #         
+   #Definimos el metodo para hallar los puntos de las fichas negras para la funcion de coste
+    #############################################################################################################                                   
+    def valSum1Int(self,valj):
+            
+            if valj==7 : #Si esta en la fila 5 la ficha vale 1
+                return 28
+            elif valj==6 : #Si esta en la fila 5 la ficha vale 2
+                return 21
+            elif valj==5: #Si esta en la fila 6 la ficha vale 3
+                return 15
+            elif valj==4: #Si esta en la fila 7 la ficha vale 5
+                return 10
+            elif valj==3: #Si esta en la fila 3 la ficha vale 0
+                return 6
+            elif valj==2: #Si esta en la fila 2 la ficha vale -1
+                return 3
+            elif valj==1: #Si esta en la fila 1 la ficha vale -2
+                return 1
+            elif valj==0: #Si esta en la fila 0 la ficha vale -3
+                return 0
+    #############################################################################################################
    #Definimos el metodo para hallar los puntos de cada jugador
    #############################################################################################################         
     def count(self):
@@ -104,20 +147,20 @@ class Linja():
 
     #Definimos el metodo para hallar los puntos que tiene cada jugador y restarle al otro los que el otro tiene
     ##############################################################################################################                    
-    def countInteligente(self,tablero):
+    def countInteligente(self):
         contadorTemp1=0 #Contador de puntos del jugador Negro
         contadorTemp2=0 #Contador de puntos del jugador Rojo
         #Recorremos todo el tablero comprobando donde esta cada una de las fichas
         for j in range(8):
             for i in range(6):
-                if tablero[j][i]==1: #Comprobamos si tiene una ficha Negra
+                if self.tablero[j][i]==1: #Comprobamos si tiene una ficha Negra
                     #Sumamos el valor que tenga la ficha Negra dependiendo de la fila en la que este
-                    temp1=self.valSum1(j)
+                    temp1=self.valSum1Int(j)
                     contadorTemp1+=temp1 
                     contadorTemp2-=temp1 
-                elif tablero[j][i]==2:
+                elif self.tablero[j][i]==2:
                     #Sumamos el valor que tenga la ficha Roja dependiendo de la fila en la que este
-                    temp2=self.valSum2(j)
+                    temp2=self.valSum2Int(j)
                     contadorTemp2+=temp2
                     contadorTemp1-=temp2
 
