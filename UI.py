@@ -245,6 +245,7 @@ elif(modoDeJuego==2): #Modo de juego de jugador contra IA
                         pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
                         movientoOrdenador=inteligencia.jugarTurnoOrdenador(interfaz.juego)
                         interfaz.juego.moveArbitrado(movientoOrdenador[0],movientoOrdenador[1])
+                        interfaz.juego.moveArbitrado(movientoOrdenador[2],movientoOrdenador[3])
                         contadorParte=0
                 
                 print(interfaz.juego.tablero) #Imprimimos por consola el tablero de juego para poder asegurarnos que todo funciona bien

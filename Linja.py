@@ -1,7 +1,7 @@
 ## Author: Álvaro Villar Val
 ## Nombre: Linja
-## Version: 0.8
-## Fecha: 11/10/2023
+## Version: 0.9
+## Fecha: 30/10/2023
 #Declaramos los imports
 import numpy as np
 
@@ -30,6 +30,7 @@ class Linja():
         self.contadorFin2=0          #Contador que apunta cuantas fichas extra hay en la fila 0 del tablero
         self.movimiento=0            #Cuanto se puede mover en el segundo movimiento del Turno
         self.turno=2                 #Guarda el turno en el que estamos
+        self.comprobadorTurno=True        #Guardamos un comprobador de cuantos turnos seguidos hemos hecho
     #############################################################################################################  
 
     #Definimos la función que establece el stado incial del tablero
@@ -327,15 +328,19 @@ class Linja():
         if self.isLegal(origenFil,origenCol,destinoFil,destinoCol): #Comprobamos si es un movimiento legal
             if self.movimiento==0:   #Comprobamos si estamos en el la primera parte del turno 
                 if(destinoFil==0 or destinoFil==7): #Si se llega a la ultima fila se cambia automaticamente el turno
-                    self.changeTurn()
+                   self.movimiento=1
                 else:
                     if(self.countline(destinoFil)==0):#Si no estamos en la ultima fila pero no hay fichas en la fila destino se cambia el turno
                         self.changeTurn()
                     else:
                         self.movimiento=self.countline(destinoFil)
-            else:   #Estamos en la segunda parte del turno por ende tenemos que cambiar de turno y poner a 0 el movimiento
+            else:   #Estamos en la segunda parte del turno por ende tenemos que cambiar de turno si no nos movemos a una fila vacia y poner a 0 el movimiento
                 comprobador=True #Cambiamos a True el comprobador de manera que se pondra a 0 el la var movimiento despues de mover
-                self.changeTurn()
+                if(self.countline(destinoFil)==0 and self.comprobadorTurno):
+                    self.comprobadorTurno=False
+                else:
+                    self.changeTurn()
+                    self.comprobadorTurno=True
             self.move(origen,destino) #Si es legal movemos las ficha
             if(comprobador): #Cambiamos a 0 el valor de la var movimiento
                 self.movimiento=0
