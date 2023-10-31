@@ -327,7 +327,7 @@ class Linja():
         comprobador=False #Comprobador para saber si hay que resetear a 0 el contador de movimiento
         if self.isLegal(origenFil,origenCol,destinoFil,destinoCol): #Comprobamos si es un movimiento legal
             if self.movimiento==0:   #Comprobamos si estamos en el la primera parte del turno 
-                if(destinoFil==0 or destinoFil==7): #Si se llega a la ultima fila se cambia automaticamente el turno
+                if(destinoFil==0 or destinoFil==7): #Si se llega a la ultima fila se obtine 1 movimiento solo
                    self.movimiento=1
                 else:
                     if(self.countline(destinoFil)==0):#Si no estamos en la ultima fila pero no hay fichas en la fila destino se cambia el turno
@@ -336,11 +336,11 @@ class Linja():
                         self.movimiento=self.countline(destinoFil)
             else:   #Estamos en la segunda parte del turno por ende tenemos que cambiar de turno si no nos movemos a una fila vacia y poner a 0 el movimiento
                 comprobador=True #Cambiamos a True el comprobador de manera que se pondra a 0 el la var movimiento despues de mover
-                if(self.countline(destinoFil)==0 and self.comprobadorTurno):
-                    self.comprobadorTurno=False
+                if(self.countline(destinoFil)==0 and self.comprobadorTurno): #Comprobamos si en la segunda mitad del turno acaba en fila vacia por primera vez
+                    self.comprobadorTurno=False #Marcamos que ya hemos conseguido un segundo turno
                 else:
-                    self.changeTurn()
-                    self.comprobadorTurno=True
+                    self.changeTurn() #En caso de que no llegue a una fila vacia o no lo haga por primera vez cambiamos turno
+                    self.comprobadorTurno=True #Desmarcamos que hemos comseguido segundo turno
             self.move(origen,destino) #Si es legal movemos las ficha
             if(comprobador): #Cambiamos a 0 el valor de la var movimiento
                 self.movimiento=0
