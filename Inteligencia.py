@@ -113,6 +113,15 @@ class Inteligente():
                     maxVal2=temp[3]
                     if(maxval<=maxVal2):
                         maxHijo=copy.deepcopy(temp)
+                        tempX=maxHijo[1]
+                        tempY=maxHijo[2]
+                        if(prof!=0):
+                            maxHijo[4]=tempX
+                            maxHijo[5]=tempY
+                            maxHijo[1]=papa[1]
+                            maxHijo[2]=papa[2]
+                        
+
                         comprobador=False
                 if(comprobador):
                     print("Error en mini en busqueda del min")
