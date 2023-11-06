@@ -1,12 +1,12 @@
 ## Author: Álvaro Villar Val
 ## Nombre: Inteligencia
-## Version: 0.5
+## Version: 0.6
 ## Fecha: 30/10/2023
 #Declaramos los imports
 import numpy as np
 from Linja import Linja
 import copy
-
+#To do cortes alpha beta
 class Inteligente():
     #Definimos el constructor de la clase objeto
     ############################################################################################################## 
@@ -109,20 +109,21 @@ class Inteligente():
                 for i in range(len(hijos)):
                     minHijos[i]=self.minMax(hijos[i],prof+1,turnOrg)
                 for temp in minHijos:
-                    maxval=maxHijo[3]
-                    maxVal2=temp[3]
-                    if(maxval<=maxVal2):
-                        maxHijo=copy.deepcopy(temp)
-                        tempX=maxHijo[1]
-                        tempY=maxHijo[2]
-                        if(prof!=0):
-                            maxHijo[4]=tempX
-                            maxHijo[5]=tempY
-                            maxHijo[1]=papa[1]
-                            maxHijo[2]=papa[2]
-                        
+                    if(temp!=0):
+                        maxval=maxHijo[3]
+                        maxVal2=temp[3]
+                        if(maxval<=maxVal2):
+                            maxHijo=copy.deepcopy(temp)
+                            tempX=maxHijo[1]
+                            tempY=maxHijo[2]
+                            if(prof!=0):
+                                maxHijo[4]=tempX
+                                maxHijo[5]=tempY
+                                maxHijo[1]=papa[1]
+                                maxHijo[2]=papa[2]
+                            
 
-                        comprobador=False
+                            comprobador=False
                 if(comprobador):
                     print("Error en mini en busqueda del min")
                     return 0
@@ -134,18 +135,19 @@ class Inteligente():
                 for i in range(len(hijos)):
                     maxHijos[i]=self.minMax(hijos[i],prof+1,turnOrg)
                 for temp in maxHijos:
-                    minval=minHijo[3]
-                    minVal2=temp[3]
-                    if(minval>=minVal2):
-                        minHijo=copy.deepcopy(temp)
-                        tempX=minHijo[1]
-                        tempY=minHijo[2]
-                        if(prof!=0):
-                            minHijo[4]=tempX
-                            minHijo[5]=tempY
-                            minHijo[1]=papa[1]
-                            minHijo[2]=papa[2]
-                        comprobador=False
+                    if(temp!=0):
+                        minval=minHijo[3]
+                        minVal2=temp[3]
+                        if(minval>=minVal2):
+                            minHijo=copy.deepcopy(temp)
+                            tempX=minHijo[1]
+                            tempY=minHijo[2]
+                            if(prof!=0):
+                                minHijo[4]=tempX
+                                minHijo[5]=tempY
+                                minHijo[1]=papa[1]
+                                minHijo[2]=papa[2]
+                            comprobador=False
                 if(comprobador):
                     print("Error en mini en busqueda del min")
                     return 0
