@@ -125,7 +125,7 @@ class Inteligente():
     #############################################################################################################
     def minMax(self, papa,prof,turnOrg):
         estadoPap=papa[0] #Guardamos el estado de papa en estadoPap
-        if(prof<5): #Definimos cuanta queremos que sea la profundidad
+        if(prof<7): #Definimos cuanta queremos que sea la profundidad
             hijos=self.obtenerHijos(papa,turnOrg) #Obtenemos la lista de posibles hijos del estado actual
             #si el turno de movimiento es el mismo del turno original que llamo a la función min y max hacemos funcion max
             if(estadoPap.turno==turnOrg): 
