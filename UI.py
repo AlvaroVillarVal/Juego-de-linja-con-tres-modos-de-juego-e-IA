@@ -1,18 +1,16 @@
 # ## Author: Álvaro Villar Val
 ## Nombre: UI
-## Version: 0.7
-## Fecha: 11/10/2023
+## Version: 0.8
+## Fecha: 8/11/2023
 #Declaramos los imports
 import pygame 
 import sys
 import time
 from Linja import Linja
 from Inteligencia import Inteligente
-#TO DO: Hacer que cuando se selccione una ficha esta se resalte(Dibujando una circulito blanco fino por encima),
-#  hacer que salga por pantalla el hecho de que no se puede mover una ficha, No seleccionar una coordenada cuando 
-# esta este vacia en la matriz,hacer pagina de inicio para seleccionar que modo jugar, hacer pantalla de final, funcion
+#TO DO:hacer que salga por pantalla el hecho de que no se puede mover una ficha, hacer pantalla de final, funcion
 #de coste total de ambos jugadores,(imprimmir countint), turno por jugador, hacer distinticones entre jugador de ia u jugador humano
-#
+
 
 pygame.init()
 ##########################################################################################################################################
