@@ -1,7 +1,7 @@
 ## Author: Álvaro Villar Val
 ## Nombre: Linja
-## Version: 0.9
-## Fecha: 30/10/2023
+## Version: 1.0
+## Fecha: 8/11/2023
 #Declaramos los imports
 import numpy as np
 
@@ -92,21 +92,21 @@ class Linja():
     ##############################################################################################################                             
     def valSum2Int(self,valj):
            
-            if valj==0: #Si esta en la fila 0 la ficha vale 5
+            if valj==0: #Si esta en la fila 0 la ficha vale 28
                 return 28
-            elif valj==1: #Si esta en la fila 1 la ficha vale 3
+            elif valj==1: #Si esta en la fila 1 la ficha vale 21
                 return 21
-            elif valj==2: #Si esta en la fila 2 la ficha vale 2
+            elif valj==2: #Si esta en la fila 2 la ficha vale 15
                 return 15
-            elif valj==3: #Si esta en la fila 3 la ficha vale 1
+            elif valj==3: #Si esta en la fila 3 la ficha vale 10
                 return 10
-            elif valj==4: #Si esta en la fila 4 la ficha vale 0
+            elif valj==4: #Si esta en la fila 4 la ficha vale 6
                 return 6
-            elif valj==5: #Si esta en la fila 5 la ficha vale -1
+            elif valj==5: #Si esta en la fila 5 la ficha vale 3
                 return 3
-            elif valj==6: #Si esta en la fila 6 la ficha vale -2
+            elif valj==6: #Si esta en la fila 6 la ficha vale 1
                 return 1
-            elif valj==7: #Si esta en la fila 7 la ficha vale -3
+            elif valj==7: #Si esta en la fila 7 la ficha vale 0
                 return 0
     ############################################################################################################# 
     #         
@@ -114,21 +114,21 @@ class Linja():
     #############################################################################################################                                   
     def valSum1Int(self,valj):
             
-            if valj==7 : #Si esta en la fila 5 la ficha vale 1
+            if valj==7 : #Si esta en la fila 5 la ficha vale 28
                 return 28
-            elif valj==6 : #Si esta en la fila 5 la ficha vale 2
+            elif valj==6 : #Si esta en la fila 5 la ficha vale 21
                 return 21
-            elif valj==5: #Si esta en la fila 6 la ficha vale 3
+            elif valj==5: #Si esta en la fila 6 la ficha vale 15
                 return 15
-            elif valj==4: #Si esta en la fila 7 la ficha vale 5
+            elif valj==4: #Si esta en la fila 7 la ficha vale 10
                 return 10
-            elif valj==3: #Si esta en la fila 3 la ficha vale 0
+            elif valj==3: #Si esta en la fila 3 la ficha vale 6
                 return 6
-            elif valj==2: #Si esta en la fila 2 la ficha vale -1
+            elif valj==2: #Si esta en la fila 2 la ficha vale 3
                 return 3
-            elif valj==1: #Si esta en la fila 1 la ficha vale -2
+            elif valj==1: #Si esta en la fila 1 la ficha vale 1
                 return 1
-            elif valj==0: #Si esta en la fila 0 la ficha vale -3
+            elif valj==0: #Si esta en la fila 0 la ficha vale 0
                 return 0
     #############################################################################################################
    #Definimos el metodo para hallar los puntos de cada jugador
