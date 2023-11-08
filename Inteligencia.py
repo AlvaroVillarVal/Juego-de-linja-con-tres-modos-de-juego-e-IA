@@ -1,7 +1,7 @@
 ## Author: Álvaro Villar Val
 ## Nombre: Inteligencia
-## Version: 0.7
-## Fecha: 30/10/2023
+## Version: 1.0
+## Fecha: 08/11/2023
 #Declaramos los imports
 import numpy as np
 from Linja import Linja
@@ -18,9 +18,9 @@ class Inteligente():
     #############################################################################################################
     def jugarTurnoOrdenador(self,juego:Linja):
         #Hacemos la funcion minmax en el estado actual del juego para encontrar el moviemnto oprimo
-        for i in range(8):
-
-            hijoOptimo,alfabet=self.minMax([juego,0,0,0,0,0],0,juego.turno,0,0,7-i)
+        for i in range(8): #en caso de no funcionar con una profundidad de 8 ya que no tendría, 
+            #4 o 5 más a futuro reducimos la profundidad hasta que haga el unico movimiento que puede hacer
+            hijoOptimo,alfabet=self.minMax([juego,0,0,0,0,0],0,juego.turno,0,0,7-i)#LLamamos al miniMax y recibimos el hijo optimo
             if(hijoOptimo!=0):
                 movimientoOptimo=[hijoOptimo[1],hijoOptimo[2],hijoOptimo[4],hijoOptimo[5]]
                 return movimientoOptimo #devolvemos el movimiento optimo
@@ -128,9 +128,9 @@ class Inteligente():
     # que lo llama
     #############################################################################################################
     def minMax(self, papa,prof,turnOrg,alfa,beta,profMax):
-        if(prof==0):
-            alfa=-10000
-            beta=10000
+        if(prof==0): #lo instanciamos en la primera llamada del minmax
+            alfa=-10000 #Ponemos a alfa en un numero muy muy pequeño que sea imposible de llegar con puntos
+            beta=10000  #Ponemos a alfa en un numero muy muy grande que sea imposible de llegar con puntos
         estadoPap=papa[0] #Guardamos el estado de papa en estadoPap
         if(prof<profMax): #Definimos cuanta queremos que sea la profundidad
             hijos=self.obtenerHijos(papa,turnOrg) #Obtenemos la lista de posibles hijos del estado actual
@@ -143,11 +143,11 @@ class Inteligente():
                 for i in range(len(hijos)): #Recorremos la lista de hijos guardando los hijos optimos
                     #LLamamos a la función min y max para buscar el siguiente hijo optimo, y lo guardamos en la posición adecuada
                     minHijos[i],alfabet=self.minMax(hijos[i],prof+1,turnOrg,alfa,beta,profMax) 
-                    if(alfa<alfabet): #AlfaBeta
-                        if(alfabet>beta):
-                            print("Corte alfa")
-                            return 0,alfa
-                    alfa=alfabet
+                    if(alfa<alfabet): #hacemos los cortes alfa beta, en caso de que el alfa del hijo sea mayor
+                        if(alfabet>=beta): #si el alfa es mayor que el beta hacemos corte
+                            print("Corte alfa") #Se have corte alfa
+                            return 0,alfa #se devuelve 0(el corte)
+                        alfa=alfabet #En caso de no hacer el corte el nuevo alfa se guarda
                 for temp in minHijos: #recorremos la lista de hijos optimos
                     if(temp!=0): #si el hijo no es 0 osea que hay hijo y no es nulo
                         maxval=maxHijo[3] #guardamos el contador de puntos del hijo maximo actual
@@ -180,12 +180,11 @@ class Inteligente():
                 for i in range(len(hijos)):#Recorremos la lista de hijos guardando los hijos optimos
                      #LLamamos a la función min y max para buscar el siguiente hijo optimo, y lo guardamos en la posición adecuada
                     maxHijos[i],alfabet=self.minMax(hijos[i],prof+1,turnOrg,alfa,beta,profMax)
-                    if(beta>alfabet):
-                        
-                        if(alfa>alfabet):
-                            print("Corte beta")
-                            return 0,beta
-                        beta=alfabet
+                    if(beta>alfabet): #hacemos los cortes alfa beta, en caso de que el beta del hijo sea menos
+                        if(alfa>=alfabet):  #si el alfa es mayor que el beta hacemos corte
+                            print("Corte beta") #Imprimimos que se realiza un corte beta
+                            return 0,beta   #Pasamos el corte beta
+                        beta=alfabet     #En caso de que no ocurra un corte
                 for temp in maxHijos: #recorremos la lista de hijos optimos
                     if(temp!=0): #si el hijo no es 0 osea que hay hijo y no es nulo
                         minval=minHijo[3] #guardamos el contador de puntos del hijo minimo actual
@@ -212,15 +211,7 @@ class Inteligente():
                 return minHijo,beta  #si hay hijo valido devolvemos el hijo optimo
             
         else: #Si la profundidad es maxima
-            if(estadoPap.turno==turnOrg):
-                temp=alfa
-                if(alfa<papa[3]):
-                    temp=papa[3]
-            else:
-                temp=beta
-                if(beta>papa[3]):
-                    temp=papa[3]
-            return papa ,temp#devuelve el padre
+            return papa ,papa[3]#devuelve el padre y el valor del mismo
     #############################################################################################################
 ###############################################################################################################################
    

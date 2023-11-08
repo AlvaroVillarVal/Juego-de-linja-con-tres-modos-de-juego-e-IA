@@ -254,10 +254,10 @@ class Ui():
         self.juego.countInteligente() #Contamos los puntos de los dos jugadores
         #Imprimimos por pantalla los puntos de ambos jugadores
         self.escribir("Puntos Fichas ",[690,655])
-        self.juego.countInteligente
-        self.escribir("Negras: {}".format(self.juego.contadorTot1),[690,670])
+        puntos=self.juego.countInteligente()
+        self.escribir("Negras: {}".format(puntos[0]),[690,670])
         self.escribir("Puntos Fichas ",[690,145])
-        self.escribir("Rojas: {}".format(self.juego.contadorTot2),[690,160])
+        self.escribir("Rojas: {}".format(puntos[1]),[690,160])
     
     def rutinaFinJuegos(self):
         pygame.draw.rect(self.pantalla, pygame.Color('White'), (607, 15, 173, 763), 0) 
