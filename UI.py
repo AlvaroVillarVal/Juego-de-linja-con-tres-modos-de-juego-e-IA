@@ -10,6 +10,7 @@ from Linja import Linja
 from Inteligencia import Inteligente
 #TO DO:hacer que salga por pantalla el hecho de que no se puede mover una ficha, hacer pantalla de final, funcion
 #de coste total de ambos jugadores,(imprimmir countint), turno por jugador, hacer distinticones entre jugador de ia u jugador humano
+#Comentar
 
 
 pygame.init()
@@ -253,6 +254,7 @@ class Ui():
         self.juego.countInteligente() #Contamos los puntos de los dos jugadores
         #Imprimimos por pantalla los puntos de ambos jugadores
         self.escribir("Puntos Fichas ",[690,655])
+        self.juego.countInteligente
         self.escribir("Negras: {}".format(self.juego.contadorTot1),[690,670])
         self.escribir("Puntos Fichas ",[690,145])
         self.escribir("Rojas: {}".format(self.juego.contadorTot2),[690,160])
@@ -278,7 +280,40 @@ class Ui():
             self.escribir("Empate entre los ",[700,450])
             self.escribir("dos jugadores",[700,465])
         return False
-            
+    def rutinaInicio(self):
+        self.pantalla.fill(pygame.Color('LightBlue'))
+        self.escribir("Escoge el Modo de juego",[400,50]) 
+        pygame.draw.rect(self.pantalla, pygame.Color('Grey'), (90, 90, 620, 120), 0)  
+        pygame.draw.rect(self.pantalla, pygame.Color('white'), (100, 100, 600, 100), 0) 
+        self.escribir("Jugador Contra Jugador",[400,150]) 
+        pygame.draw.rect(self.pantalla, pygame.Color('Grey'), (90, 290, 620, 120), 0)  
+        pygame.draw.rect(self.pantalla, pygame.Color('white'), (100, 300, 600, 100), 0) 
+        self.escribir("Jugador Contra IA",[400,350]) 
+        pygame.draw.rect(self.pantalla, pygame.Color('Grey'), (90, 490, 620, 120), 0)  
+        pygame.draw.rect(self.pantalla, pygame.Color('white'), (100, 500, 600, 100), 0) 
+        self.escribir("IA VS IA",[400,550]) 
+        pygame.display.update()
+        comprobadorInicio=True
+        modoDeJuego=None
+        while(comprobadorInicio):
+            for event in pygame.event.get(): #Cada vez que se recoge un evento generado por el usuario hacemos una de 3 cosas
+                if event.type == pygame.QUIT: #En caso de que el usuario cierre la ventana finalizamos el programa
+                    sys.exit() 
+                if event.type == pygame.MOUSEBUTTONDOWN and comprobadorFinal : #Si el usuario ha clicado el raton 
+                    mouseX = event.pos[0] #Recogemos la posición X del raton en el momento del Click
+                    mouseY = event.pos[1] #Recogemos la posición Y del raton en el momento del click
+                    if mouseX>90 and mouseX<620:
+                        if mouseY>90 and mouseY<210:
+                            modoDeJuego=1 #Jugador contra Jugador
+                            comprobadorInicio=False
+                        elif mouseY>290 and mouseY<410:
+                            modoDeJuego=2 #Jugador contra IA
+                            comprobadorInicio=False
+                        elif mouseY>490 and mouseY<610:
+                            modoDeJuego=3 #IA contra IA
+                            comprobadorInicio=False
+        return modoDeJuego
+
 ###########################################################################################################################################
 #Runer Code    
 #Declaramos las variables que utilizaremos
@@ -286,39 +321,7 @@ cordenadaOrigen=None #Declaramos la variable para guardar la posición de la fic
 cordenadaFinal=None #Declaramos la variable para gaurdar la posición a la que querremos mover la ficha
 comprobadorFinal=True #Declaramos la variable que parara el juego en caso de que terminemos
 interfaz=Ui()   #Declaramos e inicializamos la interfaz que usaremos
-interfaz.pantalla.fill(pygame.Color('LightBlue'))
-interfaz.escribir("Escoge el Modo de juego",[400,50]) 
-pygame.draw.rect(interfaz.pantalla, pygame.Color('Grey'), (90, 90, 620, 120), 0)  
-pygame.draw.rect(interfaz.pantalla, pygame.Color('white'), (100, 100, 600, 100), 0) 
-interfaz.escribir("Jugador Contra Jugador",[400,150]) 
-pygame.draw.rect(interfaz.pantalla, pygame.Color('Grey'), (90, 290, 620, 120), 0)  
-pygame.draw.rect(interfaz.pantalla, pygame.Color('white'), (100, 300, 600, 100), 0) 
-interfaz.escribir("Jugador Contra IA",[400,350]) 
-pygame.draw.rect(interfaz.pantalla, pygame.Color('Grey'), (90, 490, 620, 120), 0)  
-pygame.draw.rect(interfaz.pantalla, pygame.Color('white'), (100, 500, 600, 100), 0) 
-interfaz.escribir("IA VS IA",[400,550]) 
-pygame.display.update()
-comprobadorInicio=True
-modoDeJuego=None
-while(comprobadorInicio):
-    for event in pygame.event.get(): #Cada vez que se recoge un evento generado por el usuario hacemos una de 3 cosas
-        if event.type == pygame.QUIT: #En caso de que el usuario cierre la ventana finalizamos el programa
-            sys.exit() 
-        if event.type == pygame.MOUSEBUTTONDOWN and comprobadorFinal : #Si el usuario ha clicado el raton 
-            mouseX = event.pos[0] #Recogemos la posición X del raton en el momento del Click
-            mouseY = event.pos[1] #Recogemos la posición Y del raton en el momento del click
-            if mouseX>90 and mouseX<620:
-                if mouseY>90 and mouseY<210:
-                    modoDeJuego=1 #Jugador contra Jugador
-                    comprobadorInicio=False
-                elif mouseY>290 and mouseY<410:
-                    modoDeJuego=2 #Jugador contra IA
-                    comprobadorInicio=False
-                elif mouseY>490 and mouseY<610:
-                    modoDeJuego=3 #IA contra IA
-                    comprobadorInicio=False
-            
-
+modoDeJuego=interfaz.rutinaInicio()          
 interfaz=Ui()   #Reiniciamos las UI
 interfaz.dibujLineas() #Dibujamos las lineas en el tablero
 interfaz.dibujFichas() #Dibujamos las fichas en el tablero

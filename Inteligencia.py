@@ -1,12 +1,11 @@
 ## Author: Álvaro Villar Val
 ## Nombre: Inteligencia
-## Version: 0.6
+## Version: 0.7
 ## Fecha: 30/10/2023
 #Declaramos los imports
 import numpy as np
 from Linja import Linja
 import copy
-#To do cortes alpha beta
 class Inteligente():
     #Definimos el constructor de la clase objeto
     ############################################################################################################## 
@@ -19,10 +18,15 @@ class Inteligente():
     #############################################################################################################
     def jugarTurnoOrdenador(self,juego:Linja):
         #Hacemos la funcion minmax en el estado actual del juego para encontrar el moviemnto oprimo
-        hijoOptimo=self.minMax([juego,0,0,0,0,0],0,juego.turno)
+        for i in range(8):
+
+            hijoOptimo,alfabet=self.minMax([juego,0,0,0,0,0],0,juego.turno,0,0,7-i)
+            if(hijoOptimo!=0):
+                movimientoOptimo=[hijoOptimo[1],hijoOptimo[2],hijoOptimo[4],hijoOptimo[5]]
+                return movimientoOptimo #devolvemos el movimiento optimo
         #Guardamos el movimiento optimo para que lo pueda recivir la UI y usarlo de manera efectiva
-        movimientoOptimo=[hijoOptimo[1],hijoOptimo[2],hijoOptimo[4],hijoOptimo[5]]
-        return movimientoOptimo #devolvemos el movimiento optimo
+       
+       
     #############################################################################################################
 
     #Definimos una funcion  que mueva la ficha al primer sitio que encuentre que no este en la lista de excluisiones
@@ -123,19 +127,27 @@ class Inteligente():
     #Definimos la función minMax que hara el algoritmo minMax y devolvera el mejor movimiento posible para el turno 
     # que lo llama
     #############################################################################################################
-    def minMax(self, papa,prof,turnOrg):
+    def minMax(self, papa,prof,turnOrg,alfa,beta,profMax):
+        if(prof==0):
+            alfa=-10000
+            beta=10000
         estadoPap=papa[0] #Guardamos el estado de papa en estadoPap
-        if(prof<7): #Definimos cuanta queremos que sea la profundidad
+        if(prof<profMax): #Definimos cuanta queremos que sea la profundidad
             hijos=self.obtenerHijos(papa,turnOrg) #Obtenemos la lista de posibles hijos del estado actual
             #si el turno de movimiento es el mismo del turno original que llamo a la función min y max hacemos funcion max
-            if(estadoPap.turno==turnOrg): 
+            if(estadoPap.turno==turnOrg): #Entramos en max
                 minHijos=[0] *len(hijos) #Instanciamos la lista de hijos minimos con tantos espacios como hijos haya
                 #Instanciamos el hijo maximo vacio y con contador de puntos muy bajo
                 maxHijo=[papa[0],[0,0],[0,0],-100000,[0,0],[0,0]]
                 comprobador=True # Comprobador de si hay hijos, si no hay un hijo valido se queda true y devuelve 0       
                 for i in range(len(hijos)): #Recorremos la lista de hijos guardando los hijos optimos
                     #LLamamos a la función min y max para buscar el siguiente hijo optimo, y lo guardamos en la posición adecuada
-                    minHijos[i]=self.minMax(hijos[i],prof+1,turnOrg) 
+                    minHijos[i],alfabet=self.minMax(hijos[i],prof+1,turnOrg,alfa,beta,profMax) 
+                    if(alfa<alfabet): #AlfaBeta
+                        if(alfabet>beta):
+                            print("Corte alfa")
+                            return 0,alfa
+                    alfa=alfabet
                 for temp in minHijos: #recorremos la lista de hijos optimos
                     if(temp!=0): #si el hijo no es 0 osea que hay hijo y no es nulo
                         maxval=maxHijo[3] #guardamos el contador de puntos del hijo maximo actual
@@ -158,8 +170,8 @@ class Inteligente():
                             comprobador=False #Actualizamos el comprobador para decir que hay hijo valido
                 if(comprobador): #Si no hay hijo valido
                     print("No tiene hijo maximo") #Imprimios por pantalla que no hay 
-                    return 0 #devolvemos 0
-                return maxHijo #si hay hijo valido devolvemos el hijo optimo
+                    return 0,alfa #devolvemos 0
+                return maxHijo,alfa #si hay hijo valido devolvemos el hijo optimo
             else:# Si no esta en el turno original hacemos min
                 maxHijos=[0] *len(hijos) #Instanciamos la lista de hijos maximos con tantos espacios como hijos haya
                 #Instanciamos el hijo minimo vacio y con contador de puntos muy alto
@@ -167,7 +179,13 @@ class Inteligente():
                 comprobador=True   # Comprobador de si hay hijos, si no hay un hijo valido se queda true y devuelve 0            
                 for i in range(len(hijos)):#Recorremos la lista de hijos guardando los hijos optimos
                      #LLamamos a la función min y max para buscar el siguiente hijo optimo, y lo guardamos en la posición adecuada
-                    maxHijos[i]=self.minMax(hijos[i],prof+1,turnOrg)
+                    maxHijos[i],alfabet=self.minMax(hijos[i],prof+1,turnOrg,alfa,beta,profMax)
+                    if(beta>alfabet):
+                        
+                        if(alfa>alfabet):
+                            print("Corte beta")
+                            return 0,beta
+                        beta=alfabet
                 for temp in maxHijos: #recorremos la lista de hijos optimos
                     if(temp!=0): #si el hijo no es 0 osea que hay hijo y no es nulo
                         minval=minHijo[3] #guardamos el contador de puntos del hijo minimo actual
@@ -186,14 +204,23 @@ class Inteligente():
                                 #Guardamos la posición de destino del padre actual, en la zona de moviemiento actual
                                 minHijo[2]=papa[2]
 
+
                             comprobador=False #Actualizamos el comprobador para decir que hay hijo valido
                 if(comprobador):    #Si no hay hijo valido
                     print("No tiene hijo minimo")   #Imprimios por pantalla que no hay 
-                    return 0    #devolvemos 0
-                return minHijo  #si hay hijo valido devolvemos el hijo optimo
+                    return 0,beta   #devolvemos 0
+                return minHijo,beta  #si hay hijo valido devolvemos el hijo optimo
             
         else: #Si la profundidad es maxima
-            return papa #devolve el padre
+            if(estadoPap.turno==turnOrg):
+                temp=alfa
+                if(alfa<papa[3]):
+                    temp=papa[3]
+            else:
+                temp=beta
+                if(beta>papa[3]):
+                    temp=papa[3]
+            return papa ,temp#devuelve el padre
     #############################################################################################################
 ###############################################################################################################################
    
