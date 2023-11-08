@@ -1,7 +1,7 @@
 ## Author: Álvaro Villar Val
-## Nombre: Practica Linja
-## Version: 0.8
-## Fecha: 11/10/2023
+## Nombre: Linja
+## Version: 1.0
+## Fecha: 8/11/2023
 #Declaramos los imports
 import numpy as np
 
@@ -30,6 +30,7 @@ class Linja():
         self.contadorFin2=0          #Contador que apunta cuantas fichas extra hay en la fila 0 del tablero
         self.movimiento=0            #Cuanto se puede mover en el segundo movimiento del Turno
         self.turno=2                 #Guarda el turno en el que estamos
+        self.comprobadorTurno=True        #Guardamos un comprobador de cuantos turnos seguidos hemos hecho
     #############################################################################################################  
 
     #Definimos la función que establece el stado incial del tablero
@@ -63,10 +64,14 @@ class Linja():
                 return 5
             else:
                 return 0 #Si no esta en ninguna de las filas de puntuar se devolveria 0
-    #############################################################################################################         
-
+    ############################################################################################################# 
+    
+    #Definimos un metodo para devolver el tablero       
+    #############################################################################################################
     def returnTablero(self):
         return self.tablero
+    #############################################################################################################
+    
     #Definimos el metodo para hallar los puntos de las fichas negras  
     ##############################################################################################################                             
     def valSum2(self,valj):
@@ -81,8 +86,51 @@ class Linja():
                 return 1
             else:
                 return 0 #Si no esta en ninguna de las filas de puntuar se devolveria 0
-    #############################################################################################################         
-   
+    #############################################################################################################  
+    
+    #Definimos el metodo para hallar los puntos de las fichas rojas para la funcion de coste
+    ##############################################################################################################                             
+    def valSum2Int(self,valj):
+           
+            if valj==0: #Si esta en la fila 0 la ficha vale 28
+                return 28
+            elif valj==1: #Si esta en la fila 1 la ficha vale 21
+                return 21
+            elif valj==2: #Si esta en la fila 2 la ficha vale 15
+                return 15
+            elif valj==3: #Si esta en la fila 3 la ficha vale 10
+                return 10
+            elif valj==4: #Si esta en la fila 4 la ficha vale 6
+                return 6
+            elif valj==5: #Si esta en la fila 5 la ficha vale 3
+                return 3
+            elif valj==6: #Si esta en la fila 6 la ficha vale 1
+                return 1
+            elif valj==7: #Si esta en la fila 7 la ficha vale 0
+                return 0
+    ############################################################################################################# 
+    #         
+   #Definimos el metodo para hallar los puntos de las fichas negras para la funcion de coste
+    #############################################################################################################                                   
+    def valSum1Int(self,valj):
+            
+            if valj==7 : #Si esta en la fila 5 la ficha vale 28
+                return 28
+            elif valj==6 : #Si esta en la fila 5 la ficha vale 21
+                return 21
+            elif valj==5: #Si esta en la fila 6 la ficha vale 15
+                return 15
+            elif valj==4: #Si esta en la fila 7 la ficha vale 10
+                return 10
+            elif valj==3: #Si esta en la fila 3 la ficha vale 6
+                return 6
+            elif valj==2: #Si esta en la fila 2 la ficha vale 3
+                return 3
+            elif valj==1: #Si esta en la fila 1 la ficha vale 1
+                return 1
+            elif valj==0: #Si esta en la fila 0 la ficha vale 0
+                return 0
+    #############################################################################################################
    #Definimos el metodo para hallar los puntos de cada jugador
    #############################################################################################################         
     def count(self):
@@ -108,12 +156,12 @@ class Linja():
             for i in range(6):
                 if self.tablero[j][i]==1: #Comprobamos si tiene una ficha Negra
                     #Sumamos el valor que tenga la ficha Negra dependiendo de la fila en la que este
-                    temp1=self.valSum1(j)
+                    temp1=self.valSum1Int(j)
                     contadorTemp1+=temp1 
                     contadorTemp2-=temp1 
                 elif self.tablero[j][i]==2:
                     #Sumamos el valor que tenga la ficha Roja dependiendo de la fila en la que este
-                    temp2=self.valSum2(j)
+                    temp2=self.valSum2Int(j)
                     contadorTemp2+=temp2
                     contadorTemp1-=temp2
 
@@ -121,8 +169,7 @@ class Linja():
         contadorTemp1-=self.contadorFin2*5 #Restamos las fichas del final del tablero del otro jugador
         contadorTemp2-=self.contadorFin1*5 #Restamos las fichas del final del tablero del otro jugador
         contadorTemp1+=self.contadorFin1*5 #Añadimos las fichas extra del final del tablero
-        self.contadorTot2=contadorTemp2    #Actualizamos los valores del contador del jugador Rojo
-        self.contadorTot1=contadorTemp1    #Actualizamos los valores del contador del jugador Negro
+        return [contadorTemp1,contadorTemp2]   
     #############################################################################################################     
         
     #Definimos el metodo para comparar si dos situaciones del tablero son la misma
@@ -280,21 +327,27 @@ class Linja():
         comprobador=False #Comprobador para saber si hay que resetear a 0 el contador de movimiento
         if self.isLegal(origenFil,origenCol,destinoFil,destinoCol): #Comprobamos si es un movimiento legal
             if self.movimiento==0:   #Comprobamos si estamos en el la primera parte del turno 
-                if(destinoFil==0 or destinoFil==7): #Si se llega a la ultima fila se cambia automaticamente el turno
-                    self.changeTurn()
+                if(destinoFil==0 or destinoFil==7): #Si se llega a la ultima fila se obtine 1 movimiento solo
+                   self.movimiento=1
                 else:
                     if(self.countline(destinoFil)==0):#Si no estamos en la ultima fila pero no hay fichas en la fila destino se cambia el turno
                         self.changeTurn()
                     else:
                         self.movimiento=self.countline(destinoFil)
-            else:   #Estamos en la segunda parte del turno por ende tenemos que cambiar de turno y poner a 0 el movimiento
+            else:   #Estamos en la segunda parte del turno por ende tenemos que cambiar de turno si no nos movemos a una fila vacia y poner a 0 el movimiento
                 comprobador=True #Cambiamos a True el comprobador de manera que se pondra a 0 el la var movimiento despues de mover
-                self.changeTurn()
+                if(self.countline(destinoFil)==0 and self.comprobadorTurno): #Comprobamos si en la segunda mitad del turno acaba en fila vacia por primera vez
+                    self.comprobadorTurno=False #Marcamos que ya hemos conseguido un segundo turno
+                else:
+                    self.changeTurn() #En caso de que no llegue a una fila vacia o no lo haga por primera vez cambiamos turno
+                    self.comprobadorTurno=True #Desmarcamos que hemos comseguido segundo turno
             self.move(origen,destino) #Si es legal movemos las ficha
             if(comprobador): #Cambiamos a 0 el valor de la var movimiento
                 self.movimiento=0
         else:
-            print("\nNo se puede mover esa ficha empezamos la parte del turno de nuevo\n ")
+            print("No se puede mover ahi")
+            return False
+        return True
     #############################################################################################################   
      
     # Definimos una función que compruebe que no hay movimientos posibles para el turno actual
@@ -352,7 +405,6 @@ class Linja():
                             return False               
         return True #Si no hemos encontrado fichas Rojas despues de encontrar la Negra es el final del juego
     #############################################################################################################
-
     
 ###########################################################################################################################################
 #Runer Code
