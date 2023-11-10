@@ -134,6 +134,8 @@ class Linja():
    #Definimos el metodo para hallar los puntos de cada jugador
    #############################################################################################################         
     def count(self):
+        self.contador2=0
+        self.contador1=0
         for j in range(8):
             for i in range(6):
                 if self.tablero[j][i]==1: #Comprobamos si tiene una ficha Negra

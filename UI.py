@@ -8,8 +8,8 @@ import sys
 import time
 from Linja import Linja
 from Inteligencia import Inteligente
-#TO DO:hacer que salga por pantalla el hecho de que no se puede mover una ficha, hacer pantalla de final, funcion
-#de coste total de ambos jugadores,(imprimmir countint), turno por jugador, hacer distinticones entre jugador de ia u jugador humano
+#TO DO:hacer que salga por pantalla el hecho de que no se puede mover una ficha, hacer pantalla de final
+# turno por jugador, hacer distinticones entre jugador de ia u jugador humano
 #Comentar
 
 
@@ -98,6 +98,8 @@ class Ui():
                     pygame.draw.circle( self.pantalla, BACK_COLOR, (int( (col * CELDA_SIZ + CELDA_SIZ//2)-5 ), int( row * CELDA_SIZ + CELDA_SIZ//2 )), RADIO_CIRC, ANCHO_CIRC )
     ##############################################################################################################
 
+    #Definimos una función para mostrar de manera visual la selcción de la ficha
+    ##############################################################################################################
     def fichaSelect(self,fila,col):
         pygame.draw.rect(self.pantalla, pygame.Color('yellow'), (int( (col * CELDA_SIZ+9 ) ), int( fila * CELDA_SIZ+9 ),CELDA_SIZ-18,CELDA_SIZ-18), 0)  #Fondo del display
     def unfichaSelect(self,fila,col):
@@ -148,60 +150,65 @@ class Ui():
                 pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
 
     def juego2(self):
+        inteligencia=Inteligente()
         cordenadaOrigen=None #Declaramos la variable para guardar la posición de la ficha que querremos mover
         cordenadaFinal=None #Declaramos la variable para gaurdar la posición a la que querremos mover la ficha
         comprobadorFinal=True #Declaramos la variable que parara el juego en caso de que terminemos
-        contadorParte=0
-        inteligencia=Inteligente()
         while True:
+            if(self.juego.comprobarFin()): #Comprobamos si se ha llegado a la situación de final de juego
+                comprobadorFinal=self.rutinaFinJuegos()    
+            if self.juego.turno==1 and comprobadorFinal:
+                time.sleep(2)
+                turnotemp=self.juego.turno
+                movientoOrdenador=inteligencia.jugarTurnoOrdenador(self.juego)
+                self.juego.moveArbitrado(movientoOrdenador[0],movientoOrdenador[1])
+                self.dibujFichas() #Dibujamos todas las fichas de nuevo para actualizar el momento de juego
+                self.dibujDisplay()
+                pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
+                time.sleep(2)
+                if(turnotemp==self.juego.turno):
+                    self.juego.moveArbitrado(movientoOrdenador[2],movientoOrdenador[3])
+                    self.dibujFichas() #Dibujamos todas las fichas de nuevo para actualizar el momento de juego
+                    self.dibujDisplay()
+                    pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
+                    
+                   # if(self.juego.comprobarFin()): #Comprobamos si se ha llegado a la situación de final de juego
+                     #   comprobadorFinal=self.rutinaFinJuegos()  
             for event in pygame.event.get(): #Cada vez que se recoge un evento generado por el usuario hacemos una de 3 cosas
                 if event.type == pygame.QUIT: #En caso de que el usuario cierre la ventana finalizamos el programa
                     sys.exit()               
+                if self.juego.turno==2:
+                    if event.type == pygame.MOUSEBUTTONDOWN and comprobadorFinal : #Si el usuario ha clicado el raton 
+                    
+                        mouseX = event.pos[0] #Recogemos la posición X del raton en el momento del Click
+                        mouseY = event.pos[1] #Recogemos la posición Y del raton en el momento del click
 
-                if event.type == pygame.MOUSEBUTTONDOWN and comprobadorFinal : #Si el usuario ha clicado el raton 
-
-                    mouseX = event.pos[0] #Recogemos la posición X del raton en el momento del Click
-                    mouseY = event.pos[1] #Recogemos la posición Y del raton en el momento del click
-
-                    filaClick = int(mouseY // CELDA_SIZ) #Adaptamos la posición Y recogida a la Fila del tablero
-                    colClick = int(mouseX // CELDA_SIZ)  #Adaptamos la posición X recogida a la columan del tablero
-                    if(cordenadaOrigen==None): #Si no se ha seleccionado una ficha a mover todavia
-                        if(self.juego.tablero[filaClick,colClick]!=0):
-                            cordenadaOrigen=[filaClick,colClick] #Guardamos la casilla seleccionada como casilla del movimiento origen
-                    else: #En caso de tener una ya seleccionada 
-                        cordenadaFinal=[filaClick,colClick] #Guardamos la posicion a la que queremos mover la ficha
-                        turnoOrg=self.juego.turno
-                        self.juego.moveArbitrado(cordenadaOrigen,cordenadaFinal) #Movemos la ficha
-                        cordenadaOrigen=None #Volvemos a vaciar la variable que guarda la ficha a mover
-                        if contadorParte==0:
-                            contadorParte+=1
-                            if(self.juego.turno==turnoOrg):
-                                contadorParte=0
-                        elif contadorParte==1:
-                            movientoOrdenador=inteligencia.jugarTurnoOrdenador(self.juego)
-                            turnotemp=self.juego.turno
-                            self.juego.moveArbitrado(movientoOrdenador[0],movientoOrdenador[1])
-                            if(turnotemp==self.juego.turno):
-                                self.juego.moveArbitrado(movientoOrdenador[2],movientoOrdenador[3])
-                            if(turnotemp==self.juego.turno):
-                                self.juego.moveArbitrado(movientoOrdenador[2],movientoOrdenador[3])
-                            if(turnotemp==self.juego.turno):
-                                self.juego.moveArbitrado(movientoOrdenador[2],movientoOrdenador[3])
-                            contadorParte=0
+                        filaClick = int(mouseY // CELDA_SIZ) #Adaptamos la posición Y recogida a la Fila del tablero
+                        colClick = int(mouseX // CELDA_SIZ)  #Adaptamos la posición X recogida a la columan del tablero
+                        if(cordenadaOrigen==None): #Si no se ha seleccionado una ficha a mover todavia
+                            if(self.juego.isInBounds(filaClick,colClick)):    
+                                if(self.juego.tablero[filaClick,colClick]==self.juego.turno):
+                                    cordenadaOrigen=[filaClick,colClick] #Guardamos la casilla seleccionada como casilla del movimiento origen
+                                    self.fichaSelect(filaClick,colClick)
+                                    pygame.display.update()
+                        else: #En caso de tener una ya seleccionada 
+                            cordenadaFinal=[filaClick,colClick] #Guardamos la posicion a la que queremos mover la ficha
+                            self.juego.moveArbitrado(cordenadaOrigen,cordenadaFinal) #Movemos la ficha
+                            self.unfichaSelect(cordenadaOrigen[0],cordenadaOrigen[1])
+                            cordenadaOrigen=None #Volvemos a vaciar la variable que guarda la ficha a mover
+                            
                     
                     print(self.juego.tablero) #Imprimimos por consola el tablero de juego para poder asegurarnos que todo funciona bien
                     self.dibujFichas() #Dibujamos todas las fichas de nuevo para actualizar el momento de juego
                     #Actualizamos el display de comunicación con el usuario
                     self.dibujDisplay()
-                    if(self.juego.comprobarFin()): #Comprobamos si se ha llegado a la situación de final de juego
-                        comprobadorFinal=self.rutinaFinJuegos()  
-
+             
                 if event.type == pygame.KEYDOWN: #Si el usuario ha pulsado una tecla
                     if event.key == pygame.K_r: #Si esa tecla es la R reinicia el juego
                         self.juego.inicio()
-
-
+            
                 pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
+
     
 
     def juego3(self):
@@ -215,13 +222,14 @@ class Ui():
                 self.dibujFichas() #Dibujamos todas las fichas de nuevo para actualizar el momento de juego
                 self.dibujDisplay()
                 pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
-                time.sleep(0.5)
+                time.sleep(1
+                           )
                 if(turnotemp==self.juego.turno):
                     self.juego.moveArbitrado(movientoOrdenador[2],movientoOrdenador[3])
                     self.dibujFichas() #Dibujamos todas las fichas de nuevo para actualizar el momento de juego
                     self.dibujDisplay()
                     pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
-                    time.sleep(0.5)
+                    time.sleep(1)
                 
                     
                 print(self.juego.tablero) #Imprimimos por consola el tablero de juego para poder asegurarnos que todo funciona bien
