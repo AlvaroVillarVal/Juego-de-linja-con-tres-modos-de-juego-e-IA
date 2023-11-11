@@ -68,19 +68,19 @@ class Inteligente():
     #############################################################################################################
     def posPrimFich(self,juego:Linja,excluidos):
     #Recorremos el tablero saltandonos la primera fila, ya que en ella no habra filas, y si las hay no se pueden mover
-        for j in range(1,8): 
+        for j in range(7): 
             for i in range(6):
                 
-                if(juego.turno==2):#Si estamos en el turno rojo
+                if(juego.turno==1):#Si estamos en el turno negro
                     if [j,i] not in excluidos: #Si la posición no esta en la lista de excluidos 
                         #Si en la posicion en la que se encuentra hay una ficha del turno que buscamos
-                        if(juego.tablero[j][i]==2): 
+                        if(juego.tablero[j][i]==1): 
                             return [j,i] #Devuelve la posción que cumple las condiciones que bucamos
-                else:# Si estamos en el turno negro
+                else:# Si estamos en el turno rojo
                     if [7-j,5-i] not in excluidos: #Si la posición no esta en la lista de excluidos
                         #Si en la posicion en la que se encuentra hay una ficha del turno que buscamos
                         #Ademas al ser el turno negro, se recorre el tablero a la contraria
-                        if(juego.tablero[7-j][5-i]==1): 
+                        if(juego.tablero[7-j][5-i]==2): 
                             return [7-j,5-i] #Devuelve la posción que cumple las condiciones que bucamos
         return False #Si falla se devuelve false por que no se ha comletado la operación
     #############################################################################################################

@@ -172,8 +172,8 @@ class Ui():
                     self.dibujDisplay()
                     pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
                     
-                   # if(self.juego.comprobarFin()): #Comprobamos si se ha llegado a la situación de final de juego
-                     #   comprobadorFinal=self.rutinaFinJuegos()  
+                if(self.juego.comprobarFin()): #Comprobamos si se ha llegado a la situación de final de juego
+                       comprobadorFinal=self.rutinaFinJuegos()  
             for event in pygame.event.get(): #Cada vez que se recoge un evento generado por el usuario hacemos una de 3 cosas
                 if event.type == pygame.QUIT: #En caso de que el usuario cierre la ventana finalizamos el programa
                     sys.exit()               
@@ -198,10 +198,9 @@ class Ui():
                             cordenadaOrigen=None #Volvemos a vaciar la variable que guarda la ficha a mover
                             
                     
-                    print(self.juego.tablero) #Imprimimos por consola el tablero de juego para poder asegurarnos que todo funciona bien
-                    self.dibujFichas() #Dibujamos todas las fichas de nuevo para actualizar el momento de juego
-                    #Actualizamos el display de comunicación con el usuario
-                    self.dibujDisplay()
+                        self.dibujFichas() #Dibujamos todas las fichas de nuevo para actualizar el momento de juego
+                        #Actualizamos el display de comunicación con el usuario
+                        self.dibujDisplay()
              
                 if event.type == pygame.KEYDOWN: #Si el usuario ha pulsado una tecla
                     if event.key == pygame.K_r: #Si esa tecla es la R reinicia el juego
