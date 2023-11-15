@@ -158,7 +158,6 @@ class Ui():
             if(self.juego.comprobarFin()): #Comprobamos si se ha llegado a la situación de final de juego
                 comprobadorFinal=self.rutinaFinJuegos()    
             if self.juego.turno==1 and comprobadorFinal:
-                time.sleep(2)
                 turnotemp=self.juego.turno
                 movientoOrdenador=inteligencia.jugarTurnoOrdenador(self.juego)
                 self.juego.moveArbitrado(movientoOrdenador[0],movientoOrdenador[1])
@@ -213,6 +212,9 @@ class Ui():
     def juego3(self):
         comprobadorFinal=True #Declaramos la variable que parara el juego en caso de que terminemos
         inteligencia=Inteligente()
+        self.dibujFichas() #Dibujamos todas las fichas de nuevo para actualizar el momento de juego
+        self.dibujDisplay()
+        pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
         while True:
             if(comprobadorFinal):    
                 turnotemp=self.juego.turno
@@ -228,7 +230,7 @@ class Ui():
                     self.dibujFichas() #Dibujamos todas las fichas de nuevo para actualizar el momento de juego
                     self.dibujDisplay()
                     pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
-                    time.sleep(1)
+                    
                 
                     
                 print(self.juego.tablero) #Imprimimos por consola el tablero de juego para poder asegurarnos que todo funciona bien

@@ -35,13 +35,13 @@ class Inteligente():
         movimientoTemp=juego.movimiento  #Guardamos cuantas casillas puede moverse en el segundo movimiento del turno
         if juego.turno==1:    #Si es el turno Negro
             if(juego.movimiento==0): #si el moviemto es 0 significa que estamos en la primera parte del turno
-                for i in range (6):  #Recorremos la fila a la que se puede mover la ficha
+                for i in range (5, -1, -1):  #Recorremos la fila a la que se puede mover la ficha
                     if ([origen[0]+1,i] not in excluidos): #si la posición destino no esta en la lista de excluidos
                          # Si se puede mover la ficha a esa posición se mueve y si se mueve entramos en el if
                         if(juego.moveArbitrado(origen,[origen[0]+1,i])):
                             return [origen[0]+1,i] #Devuelve la posición a la que se ha movido
             else: #Si no es 0 el movimiento
-                for i in range (6): #Recorremos la fila a la que se moveria con el movimiento 
+                for i in range (5, -1, -1): #Recorremos la fila a la que se moveria con el movimiento 
                      #si la posición destino no esta en la lista de excluidos
                     if([origen[0]+juego.movimiento,i] not in excluidos):
                         # Si se puede mover la ficha a esa posición se mueve y si se mueve entramos en el if
@@ -93,7 +93,7 @@ class Inteligente():
             origExcluido=[] #Instanciamos la lista de posiciones de origen a las que no les quedan hijos validos
             counts=[] # Aqui guardaos la puntuación de cada uno de los hijos
             destExluido=[] #Aqui guardamos los detinos que nos darían una puntuación que ya hayamos obtenido
-            for i in range(2): #Definimos cuantos hijos queremos obtener del estado de juego actual
+            for i in range(3): #Definimos cuantos hijos queremos obtener del estado de juego actual
                 comprobador=True #Comprobador de que no hemos encontrado un hijo valido
                 while(comprobador): #Bucle para buscar un hijo valido
                     #Obtenemos la posición de laprimera ficha que se pueda mover
