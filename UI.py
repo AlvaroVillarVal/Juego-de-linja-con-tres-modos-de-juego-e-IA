@@ -1,7 +1,7 @@
 # ## Author: Álvaro Villar Val
 ## Nombre: UI
-## Version: 0.8
-## Fecha: 8/11/2023
+## Version: 0.9
+## Fecha: 22/11/2023
 #Declaramos los imports
 import pygame 
 import sys
