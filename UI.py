@@ -1,6 +1,6 @@
 # ## Author: Álvaro Villar Val
 ## Nombre: UI
-## Version: 0.9
+## Version: 1.0
 ## Fecha: 22/11/2023
 #Declaramos los imports
 import pygame 
@@ -8,7 +8,6 @@ import sys
 import time
 from Linja import Linja
 from Inteligencia import Inteligente
-#TO DO: Comentar
 
 
 pygame.init()
@@ -168,8 +167,8 @@ class Ui():
         comprobadorFinal=True #Declaramos la variable que parara el juego en caso de que terminemos
         while True:
             if(self.juego.comprobarFin()): #Comprobamos si se ha llegado a la situación de final de juego
-                comprobadorFinal=self.rutinaFinJuegos()    
-            if self.juego.turno==1 and comprobadorFinal:
+                comprobadorFinal=self.rutinaFinJuegos()   #Si es el final de juego ejecutamos la rutina de final del juego
+            if self.juego.turno==1 and comprobadorFinal: #Si el turno es el turno de la ia y no se ha acabado el juego
                 turnotemp=self.juego.turno #Guardamos el turno de inicio de la
                 start=time.time()    #Guardamos el tiempo de inicio el contador de tiempo
                 movientoOrdenador=inteligencia.jugarTurnoOrdenador(self.juego) #Hacemos que la ia haga su turno
@@ -178,21 +177,21 @@ class Ui():
                 print(tot)          #Imprimimos el tiempo de ejecución
                 self.juego.moveArbitrado(movientoOrdenador[0],movientoOrdenador[1]) #Movemos la ficha con los movimientos de la ia
                 self.dibujFichas() #Dibujamos todas las fichas de nuevo para actualizar el momento de juego
-                self.dibujDisplay()
+                self.dibujDisplay() #Actualizamo el display
                 pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
-                time.sleep(2)
-                if(turnotemp==self.juego.turno):
-                    self.juego.moveArbitrado(movientoOrdenador[2],movientoOrdenador[3])
+                time.sleep(2) #Esperamos dos segundo para que la ia no puede hacer los dos movimientos al instante
+                if(turnotemp==self.juego.turno): #Si seguimos en el turno de la ia
+                    self.juego.moveArbitrado(movientoOrdenador[2],movientoOrdenador[3]) #Movemos a la segunda posicion que deci
                     self.dibujFichas() #Dibujamos todas las fichas de nuevo para actualizar el momento de juego
-                    self.dibujDisplay()
+                    self.dibujDisplay() #Actualizamos el display
                     pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
                     
                 if(self.juego.comprobarFin()): #Comprobamos si se ha llegado a la situación de final de juego
-                       comprobadorFinal=self.rutinaFinJuegos()  
+                       comprobadorFinal=self.rutinaFinJuegos()  #Si el juego esta terminado hacemos la rutina de final de juego
             for event in pygame.event.get(): #Cada vez que se recoge un evento generado por el usuario hacemos una de 3 cosas
                 if event.type == pygame.QUIT: #En caso de que el usuario cierre la ventana finalizamos el programa
                     sys.exit()               
-                if self.juego.turno==2:
+                if self.juego.turno==2:## si el turno de juego es el turno del humano
                     if event.type == pygame.MOUSEBUTTONDOWN and comprobadorFinal : #Si el usuario ha clicado el raton 
                     
                         mouseX = event.pos[0] #Recogemos la posición X del raton en el momento del Click
@@ -205,22 +204,22 @@ class Ui():
                                 if(self.juego.tablero[filaClick,colClick]==self.juego.turno):
                                     cordenadaOrigen=[filaClick,colClick] #Guardamos la casilla seleccionada como casilla del movimiento origen
                                     self.fichaSelect(filaClick,colClick)
-                                    pygame.display.update()  
+                                    pygame.display.update()  #Actualizamos la pantalla
                         else: #En caso de tener una ya seleccionada 
                             cordenadaFinal=[filaClick,colClick] #Guardamos la posicion a la que queremos mover la ficha
                             cond=self.juego.moveArbitrado(cordenadaOrigen,cordenadaFinal) #Movemos la ficha
-                            if(not cond): 
-                                self.escribir("No puedes mover" ,[697,250],COLOR_LINEA,18)
+                            if(not cond): #en caso que no se pueda mover la ficha a donde queremos 
+                                self.escribir("No puedes mover" ,[697,250],COLOR_LINEA,18)#Ponemos en el display que no se puede mover
                                 self.escribir("la ficha ahí",[698,269],COLOR_LINEA,18)
-                                pygame.display.update()
-                                time.sleep(1.2)
-                            self.unfichaSelect(cordenadaOrigen[0],cordenadaOrigen[1])
+                                pygame.display.update() #Actualizamos la pantalla
+                                time.sleep(1.2) #Esperamso 1,2 segundos para que se pueda leer el mesaje
+                            self.unfichaSelect(cordenadaOrigen[0],cordenadaOrigen[1])# Des seleccionamos la ficha
                             cordenadaOrigen=None #Volvemos a vaciar la variable que guarda la ficha a mover
                             
                     
                         self.dibujFichas() #Dibujamos todas las fichas de nuevo para actualizar el momento de juego
                         #Actualizamos el display de comunicación con el usuario
-                        self.dibujDisplay()
+                        self.dibujDisplay() #DIbujamos el display
              
                 if event.type == pygame.KEYDOWN: #Si el usuario ha pulsado una tecla
                     if event.key == pygame.K_r: #Si esa tecla es la R reinicia el juego
@@ -235,18 +234,17 @@ class Ui():
         comprobadorFinal=True #Declaramos la variable que parara el juego en caso de que terminemos
         inteligencia=Inteligente()
         self.dibujFichas() #Dibujamos todas las fichas de nuevo para actualizar el momento de juego
-        self.dibujDisplay()
+        self.dibujDisplay() #Dibujaos el display
         pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
         while True:
-            if(comprobadorFinal):    
-                turnotemp=self.juego.turno
-                movientoOrdenador=inteligencia.jugarTurnoOrdenador(self.juego)
-                self.juego.moveArbitrado(movientoOrdenador[0],movientoOrdenador[1])
+            if(comprobadorFinal):    #SI no es final de juego
+                turnotemp=self.juego.turno #Guardamos el turno del jugador
+                movientoOrdenador=inteligencia.jugarTurnoOrdenador(self.juego) #El ordenador juega su turno
+                self.juego.moveArbitrado(movientoOrdenador[0],movientoOrdenador[1]) #Movemos la ficha
                 self.dibujFichas() #Dibujamos todas las fichas de nuevo para actualizar el momento de juego
-                self.dibujDisplay()
+                self.dibujDisplay()#Actualizamos el display
                 pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
-                time.sleep(1
-                           )
+                time.sleep(1) #esperamos un segundo 
                 if(turnotemp==self.juego.turno):
                     self.juego.moveArbitrado(movientoOrdenador[2],movientoOrdenador[3])
                     self.dibujFichas() #Dibujamos todas las fichas de nuevo para actualizar el momento de juego
@@ -257,9 +255,9 @@ class Ui():
                     
                 print(self.juego.tablero) #Imprimimos por consola el tablero de juego para poder asegurarnos que todo funciona bien
                 self.dibujFichas() #Dibujamos todas las fichas de nuevo para actualizar el momento de juego
-                self.dibujDisplay()
+                self.dibujDisplay() #Actualizamos el display
                 if(self.juego.comprobarFin()): #Comprobamos si se ha llegado a la situación de final de juego
-                    comprobadorFinal=self.rutinaFinJuegos()  
+                    comprobadorFinal=self.rutinaFinJuegos()  #Guardamos si se ha acabado el juego
                              
             for event in pygame.event.get(): #Cada vez que se recoge un evento generado por el usuario hacemos una de 3 cosas
                     if event.type == pygame.QUIT: #En caso de que el usuario cierre la ventana finalizamos el programa
@@ -326,20 +324,20 @@ class Ui():
     #Definimos el metodo de la rutina, de inicio
     ##############################################################################################################
     def rutinaInicio(self):
-        self.pantalla.fill(pygame.Color('LightBlue'))
-        self.escribir("Escoge el Modo de juego",[400,50],COLOR_LINEA,15) 
-        pygame.draw.rect(self.pantalla, pygame.Color('Grey'), (90, 90, 620, 120), 0)  
+        self.pantalla.fill(pygame.Color('LightBlue')) #LLenamos el display de color
+        self.escribir("Escoge el Modo de juego",[400,50],COLOR_LINEA,15)  #escribimos la eleccion de los juegos
+        pygame.draw.rect(self.pantalla, pygame.Color('Grey'), (90, 90, 620, 120), 0) #Creamos el boton 
         pygame.draw.rect(self.pantalla, pygame.Color('white'), (100, 100, 600, 100), 0) 
-        self.escribir("Jugador Contra Jugador",[400,150],COLOR_LINEA,15) 
-        pygame.draw.rect(self.pantalla, pygame.Color('Grey'), (90, 290, 620, 120), 0)  
+        self.escribir("Jugador Contra Jugador",[400,150],COLOR_LINEA,15) #modo jugador contra jugador
+        pygame.draw.rect(self.pantalla, pygame.Color('Grey'), (90, 290, 620, 120), 0)  #Creamos boton
         pygame.draw.rect(self.pantalla, pygame.Color('white'), (100, 300, 600, 100), 0) 
-        self.escribir("Jugador Contra IA",[400,350],COLOR_LINEA,15) 
-        pygame.draw.rect(self.pantalla, pygame.Color('Grey'), (90, 490, 620, 120), 0)  
+        self.escribir("Jugador Contra IA",[400,350],COLOR_LINEA,15) #modo jugar contra la IA
+        pygame.draw.rect(self.pantalla, pygame.Color('Grey'), (90, 490, 620, 120), 0)  #Creamos boton
         pygame.draw.rect(self.pantalla, pygame.Color('white'), (100, 500, 600, 100), 0) 
-        self.escribir("IA VS IA",[400,550],COLOR_LINEA,15) 
-        pygame.display.update()
-        comprobadorInicio=True
-        modoDeJuego=None
+        self.escribir("IA VS IA",[400,550],COLOR_LINEA,15) #Modo ia contra ia
+        pygame.display.update() #Actualizamos el display
+        comprobadorInicio=True #Guardamos que el inicio es verdadero y no se ha decidido por ningun modo
+        modoDeJuego=None# Declaramos la variable de elección de modo
         while(comprobadorInicio):
             for event in pygame.event.get(): #Cada vez que se recoge un evento generado por el usuario hacemos una de 3 cosas
                 if event.type == pygame.QUIT: #En caso de que el usuario cierre la ventana finalizamos el programa
@@ -356,8 +354,8 @@ class Ui():
                             comprobadorInicio=False
                         elif mouseY>490 and mouseY<610:
                             modoDeJuego=3 #IA contra IA
-                            comprobadorInicio=False
-        return modoDeJuego
+                            comprobadorInicio=False #Guardamos que ya se ha seleccioando modo de juego
+        return modoDeJuego  #devuelve el modo selcceionado
 
 ###########################################################################################################################################
 #Runer Code    
