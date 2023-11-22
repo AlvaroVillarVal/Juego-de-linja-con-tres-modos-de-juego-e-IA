@@ -8,8 +8,7 @@ import sys
 import time
 from Linja import Linja
 from Inteligencia import Inteligente
-#TO DO:hacer distinticones entre jugador de ia u jugador humano
-#Comentar
+#TO DO: Comentar
 
 
 pygame.init()
@@ -101,8 +100,14 @@ class Ui():
     ##############################################################################################################
     def fichaSelect(self,fila,col):
         pygame.draw.rect(self.pantalla, pygame.Color('yellow'), (int( (col * CELDA_SIZ+9 ) ), int( fila * CELDA_SIZ+9 ),CELDA_SIZ-18,CELDA_SIZ-18), 0)  #Fondo del display
+    ##############################################################################################################
+    
+    #Deinimos una funcion para deseleccionar la ficha
+   ##############################################################################################################
     def unfichaSelect(self,fila,col):
         pygame.draw.rect(self.pantalla, BACK_COLOR, (int( (col * CELDA_SIZ+9 ) ), int( fila * CELDA_SIZ+9 ),CELDA_SIZ-18,CELDA_SIZ-18), 0)  #Fondo del display
+    ##############################################################################################################
+    
     #Definimos el primer modo de juego jugador contra jugador
     ##############################################################################################################
     def juego1(self):
@@ -152,7 +157,10 @@ class Ui():
 
 
                 pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
+    ##############################################################################################################
 
+    #Definimos función para ejecutar el segundo modo de juego
+    ##############################################################################################################
     def juego2(self):
         inteligencia=Inteligente()
         cordenadaOrigen=None #Declaramos la variable para guardar la posición de la ficha que querremos mover
@@ -162,9 +170,13 @@ class Ui():
             if(self.juego.comprobarFin()): #Comprobamos si se ha llegado a la situación de final de juego
                 comprobadorFinal=self.rutinaFinJuegos()    
             if self.juego.turno==1 and comprobadorFinal:
-                turnotemp=self.juego.turno
-                movientoOrdenador=inteligencia.jugarTurnoOrdenador(self.juego)
-                self.juego.moveArbitrado(movientoOrdenador[0],movientoOrdenador[1])
+                turnotemp=self.juego.turno #Guardamos el turno de inicio de la
+                start=time.time()    #Guardamos el tiempo de inicio el contador de tiempo
+                movientoOrdenador=inteligencia.jugarTurnoOrdenador(self.juego) #Hacemos que la ia haga su turno
+                end=time.time()     #Guardamos el tiempo de final el contador de tiempo
+                tot=end-start       #Los restamos
+                print(tot)          #Imprimimos el tiempo de ejecución
+                self.juego.moveArbitrado(movientoOrdenador[0],movientoOrdenador[1]) #Movemos la ficha con los movimientos de la ia
                 self.dibujFichas() #Dibujamos todas las fichas de nuevo para actualizar el momento de juego
                 self.dibujDisplay()
                 pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
@@ -215,9 +227,10 @@ class Ui():
                         self.juego.inicio()
             
                 pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
-
+    ##############################################################################################################
     
-
+    #Definimo el metodo del terecer modo de juego
+    ##############################################################################################################
     def juego3(self):
         comprobadorFinal=True #Declaramos la variable que parara el juego en caso de que terminemos
         inteligencia=Inteligente()
@@ -257,7 +270,10 @@ class Ui():
 
 
             pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
-
+    ##############################################################################################################
+    
+    #Definimos la función que ira actualizando el display
+    ##############################################################################################################
     def dibujDisplay(self):
         pygame.draw.rect(self.pantalla, pygame.Color('White'), (607, 15, 173, 763), 0)
         if(self.juego.turno==1):
@@ -280,7 +296,10 @@ class Ui():
         self.escribir("Negras: {}".format(puntos[0]),[690,670],JUGADOR1_COLOR,15)
         self.escribir("Puntos Fichas ",[690,145],JUGADOR2_COLOR,15)
         self.escribir("Rojas: {}".format(puntos[1]),[690,160],JUGADOR2_COLOR,15)
-    
+    ##############################################################################################################
+
+    #Definimos la función que ejecutará la rutina de fin de juego
+    ##############################################################################################################
     def rutinaFinJuegos(self):
         pygame.draw.rect(self.pantalla, pygame.Color('White'), (607, 15, 173, 763), 0) 
         self.escribir("Fin del juego",[697,400],COLOR_LINEA,25)
@@ -302,6 +321,10 @@ class Ui():
             self.escribir("Empate entre los ",[700,450],COLOR_LINEA,15)
             self.escribir("dos jugadores",[700,465],COLOR_LINEA,15)
         return False
+    ##############################################################################################################
+
+    #Definimos el metodo de la rutina, de inicio
+    ##############################################################################################################
     def rutinaInicio(self):
         self.pantalla.fill(pygame.Color('LightBlue'))
         self.escribir("Escoge el Modo de juego",[400,50],COLOR_LINEA,15) 
