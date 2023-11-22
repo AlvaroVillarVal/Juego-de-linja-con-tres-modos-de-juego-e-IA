@@ -8,8 +8,7 @@ import sys
 import time
 from Linja import Linja
 from Inteligencia import Inteligente
-#TO DO:hacer que salga por pantalla el hecho de que no se puede mover una ficha, hacer pantalla de final
-# turno por jugador, hacer distinticones entre jugador de ia u jugador humano
+#TO DO:hacer distinticones entre jugador de ia u jugador humano
 #Comentar
 
 
@@ -60,9 +59,9 @@ class Ui():
     
     #Definimos un metodo que escribira un string que le pasemos en la posicion que le pasemos
     ##############################################################################################################
-    def escribir(self,text1,pos):
-        fuente = pygame.font.Font('freesansbold.ttf', 15) # Escogemos la fuente y el tamaño en el que escribiremos
-        text = fuente.render(text1, True, COLOR_LINEA)  #Renderizamos el texto en la fuente y tamaño escogido
+    def escribir(self,text1,pos,color,tamaño):
+        fuente = pygame.font.Font('freesansbold.ttf', tamaño) # Escogemos la fuente y el tamaño en el que escribiremos
+        text = fuente.render(text1, True, color)  #Renderizamos el texto en la fuente y tamaño escogido
         textRect = text.get_rect()                      #Guardamos el rectangulo del texto
         textRect.center = (pos[0], pos[1])              #Escogemos donde queremos que aparezca
         self.pantalla.blit(text, textRect)              #Lo enseñamos por pantalla
@@ -130,7 +129,12 @@ class Ui():
                                 pygame.display.update()
                     else: #En caso de tener una ya seleccionada 
                         cordenadaFinal=[filaClick,colClick] #Guardamos la posicion a la que queremos mover la ficha
-                        self.juego.moveArbitrado(cordenadaOrigen,cordenadaFinal) #Movemos la ficha
+                        cond=self.juego.moveArbitrado(cordenadaOrigen,cordenadaFinal) #Movemos la ficha
+                        if(not cond): 
+                            self.escribir("No puedes mover" ,[697,250],COLOR_LINEA,18)
+                            self.escribir("la ficha ahí",[698,269],COLOR_LINEA,18)
+                            pygame.display.update()
+                            time.sleep(1.2)
                         self.unfichaSelect(cordenadaOrigen[0],cordenadaOrigen[1])
                         cordenadaOrigen=None #Volvemos a vaciar la variable que guarda la ficha a mover
                         
@@ -189,10 +193,15 @@ class Ui():
                                 if(self.juego.tablero[filaClick,colClick]==self.juego.turno):
                                     cordenadaOrigen=[filaClick,colClick] #Guardamos la casilla seleccionada como casilla del movimiento origen
                                     self.fichaSelect(filaClick,colClick)
-                                    pygame.display.update()
+                                    pygame.display.update()  
                         else: #En caso de tener una ya seleccionada 
                             cordenadaFinal=[filaClick,colClick] #Guardamos la posicion a la que queremos mover la ficha
-                            self.juego.moveArbitrado(cordenadaOrigen,cordenadaFinal) #Movemos la ficha
+                            cond=self.juego.moveArbitrado(cordenadaOrigen,cordenadaFinal) #Movemos la ficha
+                            if(not cond): 
+                                self.escribir("No puedes mover" ,[697,250],COLOR_LINEA,18)
+                                self.escribir("la ficha ahí",[698,269],COLOR_LINEA,18)
+                                pygame.display.update()
+                                time.sleep(1.2)
                             self.unfichaSelect(cordenadaOrigen[0],cordenadaOrigen[1])
                             cordenadaOrigen=None #Volvemos a vaciar la variable que guarda la ficha a mover
                             
@@ -250,57 +259,61 @@ class Ui():
             pygame.display.update() #Actualizamos el display del juego para que el jugador vea su moviemiento
 
     def dibujDisplay(self):
-        pygame.draw.rect(self.pantalla, pygame.Color('White'), (607, 15, 173, 763), 0) 
-        self.escribir(self.juego.getTurno(),[700,200]) #Escribimos el Turno al que le toca jugar
+        pygame.draw.rect(self.pantalla, pygame.Color('White'), (607, 15, 173, 763), 0)
+        if(self.juego.turno==1):
+            self.escribir(self.juego.getTurno(),[695,450],JUGADOR1_COLOR,23) #Escribimos el Turno al que le toca jugar
+        else:
+            self.escribir(self.juego.getTurno(),[693,350],JUGADOR2_COLOR,23) #Escribimos el Turno al que le toca jugar
+        
         # Escribimos cuantas casillas se puede mover la siguiente ficha
-        self.escribir("Movimientos:{}".format(self.juego.movimiento),[700,400]) 
+        self.escribir("Movimientos:{}".format(self.juego.movimiento),[695,400],COLOR_LINEA,20) 
         # Escribimos cuantas fichas Rojas hay en la ultima fila
-        self.escribir("Fichas en la ultima fila",[690,100])
-        self.escribir("Rojas: {}".format(self.juego.contadorFin2),[700,115])
+        self.escribir("Fichas en la ultima fila",[690,100],JUGADOR2_COLOR,15)
+        self.escribir("Rojas: {}".format(self.juego.contadorFin2),[700,115],JUGADOR2_COLOR,15)
         # Escribimos cuantas fichas Negras hay en la ultima fila
-        self.escribir("Fichas en la ultima fila",[690,700])
-        self.escribir("Negras: {}".format(self.juego.contadorFin1),[700,715])
+        self.escribir("Fichas en la ultima fila",[690,700],JUGADOR1_COLOR,15)
+        self.escribir("Negras: {}".format(self.juego.contadorFin1),[700,715],JUGADOR1_COLOR,15)
         self.juego.countInteligente() #Contamos los puntos de los dos jugadores
         #Imprimimos por pantalla los puntos de ambos jugadores
-        self.escribir("Puntos Fichas ",[690,655])
+        self.escribir("Puntos Fichas ",[690,655],JUGADOR1_COLOR,15)
         puntos=self.juego.countInteligente()
-        self.escribir("Negras: {}".format(puntos[0]),[690,670])
-        self.escribir("Puntos Fichas ",[690,145])
-        self.escribir("Rojas: {}".format(puntos[1]),[690,160])
+        self.escribir("Negras: {}".format(puntos[0]),[690,670],JUGADOR1_COLOR,15)
+        self.escribir("Puntos Fichas ",[690,145],JUGADOR2_COLOR,15)
+        self.escribir("Rojas: {}".format(puntos[1]),[690,160],JUGADOR2_COLOR,15)
     
     def rutinaFinJuegos(self):
         pygame.draw.rect(self.pantalla, pygame.Color('White'), (607, 15, 173, 763), 0) 
-        self.escribir("Fin del juego",[700,400])
+        self.escribir("Fin del juego",[697,400],COLOR_LINEA,25)
         self.juego.count() #Contamos cuantos puntos tiene cada jugador
         #Imprimimos por pantalla los puntos de ambos jugadores
-        self.escribir("Puntos Fichas ",[690,655])
-        self.escribir("Negras: {}".format(self.juego.contador1),[690,670])
-        self.escribir("Puntos Fichas ",[690,145])
-        self.escribir("Rojas: {}".format(self.juego.contador2),[690,160])
+        self.escribir("Puntos Fichas ",[690,655],JUGADOR1_COLOR,15)
+        self.escribir("Negras: {}".format(self.juego.contador1),[690,670],JUGADOR1_COLOR,15)
+        self.escribir("Puntos Fichas ",[690,145],JUGADOR2_COLOR,15)
+        self.escribir("Rojas: {}".format(self.juego.contador2),[690,160],JUGADOR2_COLOR,15)
         #Comprobamos ganador para enseñarlo por pantalla
         if(self.juego.contador2>self.juego.contador1): #Si el jugador Rojo tiene mas puntos
-            self.escribir("El ganador es ",[700,450])
-            self.escribir("el jugador Rojo",[700,465])
+            self.escribir("GANADOR:",[700,450],JUGADOR2_COLOR,25)
+            self.escribir("ROJO",[700,480],JUGADOR2_COLOR,25)
         elif(self.juego.contador2<self.juego.contador1): #Si el jugador Negro tiene mas puntos
-            self.escribir("El ganador es ",[700,450])
-            self.escribir("el jugador Negro",[700,465])
+            self.escribir("GANADOR:",[700,450],JUGADOR1_COLOR,25)
+            self.escribir("NEGRO",[700,480],JUGADOR1_COLOR,25)
         else:
         #Si tienen los mismos puntos
-            self.escribir("Empate entre los ",[700,450])
-            self.escribir("dos jugadores",[700,465])
+            self.escribir("Empate entre los ",[700,450],COLOR_LINEA,15)
+            self.escribir("dos jugadores",[700,465],COLOR_LINEA,15)
         return False
     def rutinaInicio(self):
         self.pantalla.fill(pygame.Color('LightBlue'))
-        self.escribir("Escoge el Modo de juego",[400,50]) 
+        self.escribir("Escoge el Modo de juego",[400,50],COLOR_LINEA,15) 
         pygame.draw.rect(self.pantalla, pygame.Color('Grey'), (90, 90, 620, 120), 0)  
         pygame.draw.rect(self.pantalla, pygame.Color('white'), (100, 100, 600, 100), 0) 
-        self.escribir("Jugador Contra Jugador",[400,150]) 
+        self.escribir("Jugador Contra Jugador",[400,150],COLOR_LINEA,15) 
         pygame.draw.rect(self.pantalla, pygame.Color('Grey'), (90, 290, 620, 120), 0)  
         pygame.draw.rect(self.pantalla, pygame.Color('white'), (100, 300, 600, 100), 0) 
-        self.escribir("Jugador Contra IA",[400,350]) 
+        self.escribir("Jugador Contra IA",[400,350],COLOR_LINEA,15) 
         pygame.draw.rect(self.pantalla, pygame.Color('Grey'), (90, 490, 620, 120), 0)  
         pygame.draw.rect(self.pantalla, pygame.Color('white'), (100, 500, 600, 100), 0) 
-        self.escribir("IA VS IA",[400,550]) 
+        self.escribir("IA VS IA",[400,550],COLOR_LINEA,15) 
         pygame.display.update()
         comprobadorInicio=True
         modoDeJuego=None
