@@ -1,4 +1,6 @@
 # Practiga-grande-sistemas
+## Ejecución
+El programa se ejecuta en el corriendo el codigo del Programa Main
 ## Requirements
 Necesario pygames y numpy para funcionar
 ## Recomendations
