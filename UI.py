@@ -342,7 +342,7 @@ class Ui():
             for event in pygame.event.get(): #Cada vez que se recoge un evento generado por el usuario hacemos una de 3 cosas
                 if event.type == pygame.QUIT: #En caso de que el usuario cierre la ventana finalizamos el programa
                     sys.exit() 
-                if event.type == pygame.MOUSEBUTTONDOWN and comprobadorFinal : #Si el usuario ha clicado el raton 
+                if event.type == pygame.MOUSEBUTTONDOWN: #Si el usuario ha clicado el raton 
                     mouseX = event.pos[0] #Recogemos la posición X del raton en el momento del Click
                     mouseY = event.pos[1] #Recogemos la posición Y del raton en el momento del click
                     if mouseX>90 and mouseX<620:
