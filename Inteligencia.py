@@ -18,9 +18,9 @@ class Inteligente():
     #############################################################################################################
     def jugarTurnoOrdenador(self,juego:Linja):
         #Hacemos la funcion minmax en el estado actual del juego para encontrar el moviemnto oprimo
-        for i in range(8): #en caso de no funcionar con una profundidad de 8 ya que no tendría, 
+        for i in range(9): #en caso de no funcionar con una profundidad de 8 ya que no tendría, 
             #4 o 5 más a futuro reducimos la profundidad hasta que haga el unico movimiento que puede hacer
-            hijoOptimo,alfabet=self.minMax([juego,0,0,0,0,0],0,juego.turno,0,0,7-i)#LLamamos al miniMax y recibimos el hijo optimo
+            hijoOptimo,alfabet=self.minMax([juego,0,0,0,0,0],0,juego.turno,0,0,8-i)#LLamamos al miniMax y recibimos el hijo optimo
             if(hijoOptimo!=0):
                 movimientoOptimo=[hijoOptimo[1],hijoOptimo[2],hijoOptimo[4],hijoOptimo[5]]
                 return movimientoOptimo #devolvemos el movimiento optimo
