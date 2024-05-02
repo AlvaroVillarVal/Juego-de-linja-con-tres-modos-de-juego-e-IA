@@ -1,4 +1,4 @@
-# Practiga-grande-sistemas
+# Juego de linja con 3 modods de juego e IA
 ## Ejecución
 El programa se ejecuta corriendo el codigo del Programa Main
 ## Requirements
